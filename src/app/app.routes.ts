@@ -6,6 +6,17 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    children: [],
+    children: [
+      {
+        path: '',
+        redirectTo: '/posts',
+        pathMatch: 'full',
+      },
+      {
+        path: 'posts',
+        loadChildren: () => import('./features/posts/posts.routes').then((m) => m.postsRoutes),
+      },
+      ...ErrorState
+    ],
   },
 ];
