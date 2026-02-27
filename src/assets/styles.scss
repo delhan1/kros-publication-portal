@@ -9,9 +9,7 @@
 html {
   height: 100%;
   @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-    ),
+    color: mat.$azure-palette,
     typography: Roboto,
     density: -1,
   ));
@@ -37,5 +35,35 @@ body {
 
   .mat-icon {
     transform: scale(0.8);
+  }
+
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+
+    .sidenav-container {
+      flex: 1 0 auto;
+      background-color: #eeeeee; // TODO: move to theme
+
+      .sidebar {
+        width: 250px;
+
+        //.selected {
+        //  background-color: rgba(mat-color($primary), 0.12);
+        //  color: mat-color($primary);
+        //}
+      }
+    }
+
+    .page-wrapper {
+      height: calc(100vh - 64px);
+
+      .page-content {
+        padding: 15px;
+      }
+    }
   }
 }

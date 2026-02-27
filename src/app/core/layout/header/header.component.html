@@ -1,0 +1,63 @@
+<div class="d-flex justify-content-between align-items-center">
+  <span>{{ 'common.title' | translate }}</span>
+
+  <div class="d-flex justify-content-center align-items-center">
+    <mat-slide-toggle
+      class="d-none d-lg-inline-block"
+      [matTooltip]="'common.toggleDarkTheme' | translate"
+      [checked]="darkTheme"
+      (toggleChange)="toggleDarkTheme()"
+    ></mat-slide-toggle>
+
+    <button
+      class="d-none d-lg-inline-block"
+      [matMenuTriggerFor]="langsMenu"
+      mat-icon-button
+      [matTooltip]="'common.selectLang' | translate"
+    >
+      <mat-icon>language</mat-icon>
+    </button>
+
+    <button class="d-lg-none" mat-icon-button [matMenuTriggerFor]="menu" 
+            (click)="$event.stopPropagation()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #langsMenu="matMenu">
+      @for (lang of languages; track lang) {
+        <button mat-menu-item (click)="changeLanguage(lang)">
+          @if (lang === selectedLang) {
+            <mat-icon color="accent">
+              {{ 'radio_button_checked' }}
+            </mat-icon>
+          } @else {
+            <mat-icon>
+              {{ 'radio_button_unchecked' }}
+            </mat-icon>
+          }
+          {{ 'lang.' + lang | translate }} ({{ lang | uppercase }})
+        </button>
+      }
+    </mat-menu>
+
+    <mat-menu #menu="matMenu">
+      <button
+        mat-menu-item
+        (click)="$event.stopPropagation(); $event.preventDefault(); toggleDarkTheme()"
+        class="d-flex justify-content-center align-items-center"
+      >
+        <mat-icon>brightness_3</mat-icon>
+        <span class="me-3">{{ 'common.darkTheme' | translate }}</span>
+        <mat-slide-toggle
+          [checked]="darkTheme"
+          (click)="$event.stopPropagation()"
+          (toggleChange)="toggleDarkTheme()"
+        ></mat-slide-toggle>
+      </button>
+      <button mat-menu-item [matMenuTriggerFor]="langsMenu">
+        <mat-icon>language</mat-icon>
+        <span>{{ 'common.language' | translate }}</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+{
+  "common": {
+    "title": "KROS – publikačný portál",
+    "language": "Jazyk",
+    "selectLang": "Vybrať jazyk",
+    "darkTheme": "Tmavý motív",
+    "toggleDarkTheme": "Prepnúť tmavý motív",
+    "add": "Pridať",
+    "create": "Vytvoriť",
+    "update": "Upraviť",
+    "edit": "Upraviť",
+    "delete": "Odstrániť",
+    "cancel": "Zrušiť",
+    "text": "Text",
+    "date": "Dátum",
+    "sortBy": "Zoradiť podľa"
+  },
+  "posts": {
+    "title": "Články",
+    "create": "Vytvoriť článok",
+    "name": "Názov",
+    "detail": {
+      "title": "Detail článku",
+      "detail": "Detail",
+      "likes": "Páči sa mi to",
+      "like": "Páči sa mi to",
+      "dislike": "Nepáči sa mi to",
+      "comments": "Komentáre"
+    },
+    "dialog": {
+      "title": "Odstrániť tento článok?",
+      "message": "Naozaj chcete odstrániť článok \"{{value}}\"?"
+    },
+    "info": {
+      "created": "Článok \"{{value}}\" vytvorený.",
+      "updated": "Článok \"{{value}}\" upravený.",
+      "deleted": "Článok \"{{value}}\" odstránený.",
+      "noItems": "Neboli nájdené žiadne články."
+    }
+  },
+  "comments": {
+    "title": "Komentáre",
+    "create": "Pridať komentár",
+    "name": "Meno",
+    "dialog": {
+      "title": "Odstrániť tento komentár?",
+      "message": "Naozaj chcete odstrániť komentár \"{{value}}\"?"
+    },
+    "info": {
+      "created": "Komentár \"{{value}}\" pridaný.",
+      "deleted": "Komentár \"{{value}}\" odstránený.",
+      "noItems": "Neboli nájdené žiadne komentáre."
+    }
+  },
+  "lang": {
+    "en": "English",
+    "sk": "Slovensky"
+  },
+  "errors": {
+    "maximumAllowedCharacters": "Maximálny počet znakov je {{value}}.",
+    "endDateCannotBeSmaller": "Konečný dátum nemôže byť pred začiatočným.",
+    "thisFieldIsRequired": "Toto pole je povinné.",
+    "integerIsRequired": "Integer is required.",
+    "minValue": "Minimálna hodnota je {{value}}.",
+    "maxValue": "Maximálna hodnota je {{value}}.",
+    "weekendCannotBeSelected": "Víkend nemôže byť vybraný.",
+    "startDateCannotBeGreater": "Začiatočný dátum nemôže byť po konečnom.",
+    "wrongTimeFormat": "Zlý formát času (mal by byť HH:MM).",
+    "emailIsNotValid": "E-mail nie je platný.",
+    "emailAlreadyUsed": "E-mail sa už používa.",
+    "confirmPasswordNotMatch": "Heslá sa nezhodujú.",
+    "404": "Požadovaná stránka nebola nájdená.",
+    "unexpectedErrorOccurred": "Nastala neočakávaná chyba."
+  }
+}

@@ -1,0 +1,7 @@
+<mat-nav-list>
+  @for (menuItem of menuItems; track menuItem) {
+    <a mat-list-item [routerLink]="['/', menuItem.path]" routerLinkActive="selected">
+      <span>{{ menuItem.title | translate }}</span>
+    </a>
+  }
+</mat-nav-list>

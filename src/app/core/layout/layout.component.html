@@ -1,0 +1,26 @@
+<div class="main-container">
+  <mat-toolbar color="primary">
+    <button mat-icon-button class="me-3" (click)="navigation.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <app-header class="w-100"></app-header>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #navigation
+      id="navigation"
+      class="sidebar"
+      [mode]="menuHidden ? 'over' : 'side'"
+      [opened]="!menuHidden"
+      fixedTopGap="0"
+    >
+      <app-sidebar></app-sidebar>
+    </mat-sidenav>
+    <mat-sidenav-content class="page-wrapper">
+      <div class="page-content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

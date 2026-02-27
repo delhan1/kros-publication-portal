@@ -1,0 +1,75 @@
+{
+  "common": {
+    "title": "KROS – publication portal",
+    "language": "Language",
+    "selectLang": "Select language",
+    "darkTheme": "Dark theme",
+    "toggleDarkTheme": "Toggle dark theme",
+    "add": "Add",
+    "create": "Create",
+    "update": "Update",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "text": "Text",
+    "date": "Date",
+    "sortBy": "Sort by"
+  },
+  "posts": {
+    "title": "Posts",
+    "create": "Create post",
+    "name": "Name",
+    "detail": {
+      "title": "Post detail",
+      "detail": "Detail",
+      "likes": "Likes",
+      "like": "Like",
+      "dislike": "Dislike",
+      "comments": "Comments"
+    },
+    "dialog": {
+      "title": "Delete this post?",
+      "message": "Do you really want to delete post \"{{value}}\"?"
+    },
+    "info": {
+      "created": "Post \"{{value}}\" created.",
+      "updated": "Post \"{{value}}\" updated.",
+      "deleted": "Post \"{{value}}\" deleted.",
+      "noItems": "No posts found."
+    }
+  },
+  "comments": {
+    "title": "Comments",
+    "create": "Add comment",
+    "name": "Name",
+    "dialog": {
+      "title": "Delete this comment?",
+      "message": "Do you really want to delete comment \"{{value}}\"?"
+    },
+    "info": {
+      "created": "Comment \"{{value}}\" added.",
+      "deleted": "Comment \"{{value}}\" deleted.",
+      "noItems": "No comments found."
+    }
+  },
+  "lang": {
+    "en": "English",
+    "sk": "Slovensky"
+  },
+  "errors": {
+    "maximumAllowedCharacters": "Maximum allowed characters are {{value}}.",
+    "endDateCannotBeSmaller": "End date cannot be smaller than start date.",
+    "thisFieldIsRequired": "This field is required.",
+    "integerIsRequired": "Integer is required.",
+    "minValue": "Minimum value is {{value}}.",
+    "maxValue": "Maximum value is {{value}}.",
+    "weekendCannotBeSelected": "Weekend cannot be selected.",
+    "startDateCannotBeGreater": "Start date cannot be greater than end date.",
+    "wrongTimeFormat": "Wrong time format (should be HH:MM).",
+    "emailIsNotValid": "E-mail is not valid.",
+    "emailAlreadyUsed": "E-mail already used.",
+    "confirmPasswordNotMatch": "Confirmation password does not match.",
+    "404": "The page asked was not found.",
+    "unexpectedErrorOccurred": "An unexpected error occurred."
+  }
+}
