@@ -1,1 +1,32 @@
-<p>posts-list works!</p>
+@if (data.loading()) {
+  <mat-progress-spinner [diameter]="50" color="primary" mode="indeterminate"></mat-progress-spinner>
+}
+
+@if (!data.loading() && !data.postsVm().length) {
+  <div class="p-4 text-gray-500">
+    {{ 'posts.info.noItems' | translate }}
+  </div>
+}
+
+<div class="d-grid gap-3 column-gap-3">
+  @for (post of data.postsVm(); track post.id) {
+    <mat-card
+      class="example-card"
+      [appearance]="data.selectedPostId() === post.id ? 'filled' : 'outlined'"
+      [routerLink]="'/posts/' + post.id">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{ post.id }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ post.authorName }} •
+          <span class="text-muted fw-light">{{ post.createdAt ? (post.createdAt | date) : '???' }}</span>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content></mat-card-content>
+      <mat-card-actions>
+        <button matButton>LIKE</button>
+        <button matButton>SHARE</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>

@@ -1,4 +1,1 @@
-export const LANGUAGES: string[] = [
-  'en',
-  'sk'
-];
+export const LANGUAGES: string[] = ['en', 'sk'];

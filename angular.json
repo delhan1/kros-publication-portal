@@ -38,10 +38,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/assets/styles.scss"
-            ]
+            "styles": ["node_modules/bootstrap/dist/css/bootstrap.min.css", "src/assets/styles.scss"]
           },
           "configurations": {
             "production": {

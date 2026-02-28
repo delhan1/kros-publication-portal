@@ -1,0 +1,14 @@
+.posts-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+}
+
+@media (max-width: 768px) {
+  .posts-layout {
+    grid-template-columns: 1fr;
+  }
+
+  app-posts-list {
+    display: none;
+  }
+}

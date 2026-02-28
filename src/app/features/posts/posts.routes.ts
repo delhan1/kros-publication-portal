@@ -10,12 +10,12 @@ export const postsRoutes: Routes = [
     children: [
       {
         path: '',
-        component: PostsEmptyPlaceholderComponent
+        component: PostsEmptyPlaceholderComponent,
       },
       {
         path: ':id',
-        component: PostsDetailComponent
-      }
-    ]
-  }
+        component: PostsDetailComponent,
+      },
+    ],
+  },
 ];

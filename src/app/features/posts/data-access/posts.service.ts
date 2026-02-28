@@ -1,16 +1,14 @@
-﻿import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+﻿import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Post } from './posts.model';
+import { Post } from '../models/posts.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PostsService {
-
-  public constructor(private httpClient: HttpClient) {
-  }
+  public constructor(private httpClient: HttpClient) {}
 
   /**
    * Gets all posts.
@@ -20,14 +18,14 @@ export class PostsService {
     return this.httpClient.get<Post[]>(`${environment.api}/posts`);
   }
 
-  // /**
-  //  * Gets post by id.
-  //  * @param id Id of post.
-  //  * @return {Observable} of posts.
-  //  */
-  // public getPost(id: number): Observable<Post> {
-  //   return this.httpClient.get<Post>(`${API_SERVER}/post/${id}`);
-  // }
+  /**
+   * Gets post by id.
+   * @param id Id of post.
+   * @return {Observable} of posts.
+   */
+  public getPost(id: number): Observable<Post> {
+    return this.httpClient.get<Post>(`${environment.api}/posts/${id}`);
+  }
   //
   // /**
   //  * Gets count of likes by post id.

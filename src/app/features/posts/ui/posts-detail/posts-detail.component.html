@@ -1,1 +1,25 @@
-<p>posts-detail works!</p>
+@if (postsDataService.detailLoading()) {
+  <mat-progress-spinner [diameter]="50" color="primary" mode="indeterminate"></mat-progress-spinner>
+}
+
+@let post = postsDataService.postDetailVm();
+
+{{postsDataService.postDetailVm()?.title}}
+
+@if (post) {
+  <mat-card class="example-card" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{ post.title }}</mat-card-title>
+      <mat-card-subtitle>
+        {{ post.authorName }} •
+        <span class="text-muted fw-light">{{ post.createdAt ? (post.createdAt | date) : '???' }}</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content></mat-card-content>
+    <mat-card-actions>
+      <button matButton>LIKE</button>
+      <button matButton>SHARE</button>
+    </mat-card-actions>
+  </mat-card>
+}

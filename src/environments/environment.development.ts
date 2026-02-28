@@ -1,3 +1,3 @@
 export const environment = {
-  api: 'https://gorest.co.in/',
+  api: 'https://gorest.co.in/public/v2',
 };

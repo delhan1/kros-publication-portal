@@ -16,7 +16,7 @@ export const routes: Routes = [
         path: 'posts',
         loadChildren: () => import('./features/posts/posts.routes').then((m) => m.postsRoutes),
       },
-      ...ErrorState
+      ...ErrorState,
     ],
   },
 ];
