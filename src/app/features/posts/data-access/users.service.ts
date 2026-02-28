@@ -18,14 +18,14 @@ export class UsersService {
     return this.httpClient.get<User[]>(`${environment.api}/users`);
   }
 
-  // /**
-  //  * Gets user by id.
-  //  * @param id Id of user.
-  //  * @return {Observable} of users.
-  //  */
-  // public getUser(id: number): Observable<User> {
-  //   return this.httpClient.get<User>(`${API_SERVER}/user/${id}`);
-  // }
+  /**
+   * Gets user by id.
+   * @param id Id of user.
+   * @return {Observable} of users.
+   */
+  public getUser(id: number): Observable<User> {
+    return this.httpClient.get<User>(`${environment.api}/users/${id}`);
+  }
   //
   // /**
   //  * Gets count of likes by user id.
