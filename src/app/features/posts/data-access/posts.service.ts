@@ -1,5 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Post } from '../models/posts.model';
@@ -12,10 +12,19 @@ export class PostsService {
 
   /**
    * Gets all posts.
+   * @param page Page number.
+   * @param perPage Number of posts per page.
    * @return {Observable} of posts.
    */
-  public getPosts(): Observable<Post[]> {
-    return this.httpClient.get<Post[]>(`${environment.api}/posts`);
+  public getPosts(page: number, perPage: number): Observable<Post[]> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('per_page', perPage);
+
+    return this.httpClient.get<Post[]>(
+      `${environment.api}/posts`,
+      { params }
+    );
   }
 
   /**

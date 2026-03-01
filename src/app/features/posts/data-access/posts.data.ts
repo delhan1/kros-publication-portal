@@ -1,31 +1,43 @@
-﻿import { computed, effect, inject, Injectable, signal } from '@angular/core';
+﻿import { computed, effect, inject, Injectable, Signal, signal } from '@angular/core';
 import { PostsService } from './posts.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { UsersService } from './users.service';
 import { catchError, delay, EMPTY, first, forkJoin, map, of } from 'rxjs';
 import { User } from '../models/users.model';
+import { Post, PostUser } from '../models/posts.model';
 
 @Injectable()
 export class PostsDataService {
   private postsApi = inject(PostsService);
   private usersApi = inject(UsersService);
   private usersMap = signal<Record<number, User | null>>({}); // null in case of non-existing user
+  private page = signal(1); // start with 1
+  private perPage = 10; // number of posts per page
+  private loadingUsers = new Set<number>();
+  private detailResolved = signal(false);
 
+  readonly posts = signal<Post[]>([]);
   readonly selectedPostId = signal<number | null>(null);
 
   /*** RESOURCES ***/
   readonly postsResource = rxResource({
-    stream: () => this.postsApi.getPosts().pipe(delay(5000)),
+    params: () => this.page(),
+    stream: ({ params: page }) => this.postsApi.getPosts(page, this.perPage).pipe(delay(3000)),
   });
 
   readonly postDetailResource = rxResource({
     params: () => {
       const id = this.selectedPostId();
-      const fromList = this.selectedFromList();
-
+      // const postsPage = this.postsResource.value();
+      //
       if (!id) return null;
-      if (fromList !== null) return null;
-      if (this.postsResource.isLoading()) return null;
+      //
+      // // ak ešte nemáme page data, nevieme rozhodnúť
+      // if (!postsPage) return null;
+      //
+      // // 🔥 kontrola priamo proti page výsledku
+      // const existsInPage = postsPage.some(p => p.id === id);
+      // if (existsInPage) return null;
 
       return id;
     },
@@ -37,38 +49,41 @@ export class PostsDataService {
   readonly usersBatchResource = rxResource({
     params: () => {
       const ids = this.missingUserIds();
-      return ids.length ? ids : null;
+      return ids.length ? ids.join(',') : null;
     },
-    stream: ({ params: ids }) => {
-      return ids?.length
-        ? forkJoin(
-            ids.map((id) =>
-              this.usersApi.getUser(id).pipe(
-                map((user) => ({ id, user })),
-                catchError(() => of({ id, user: null })),
-              ),
-            ),
-          )
-        : of([]);
+    stream: ({ params }) => {
+      if (!params) {
+        return of([]);
+      }
+
+      const ids = params.split(',').map(Number);
+
+      if (!ids.length) {
+        return of([]);
+      }
+
+      return forkJoin(
+        ids.map((id) =>
+          this.usersApi.getUser(id).pipe(
+            first(),
+            map((user) => ({ id, user })),
+            catchError(() => of({ id, user: null })),
+          ),
+        ),
+      );
     },
   });
 
   /*** VIEWMODELS ***/
   readonly postsVm = computed(() => {
-    const posts = this.postsResource.value();
     const users = this.usersMap();
-
-    if (!posts || !users) return [];
-
-    return posts.map((post) => ({
-      id: post.id,
-      title: post.title,
-      createdAt: post.created_at,
-      authorName: users[post.user_id]?.name ?? 'Unknown',
+    return this.posts().map(post => ({
+      ...post,
+      author_name: users[post.user_id]?.name ?? 'Unknown',
     }));
   });
 
-  readonly postDetailVm = computed(() => {
+  readonly postDetailVm: Signal<PostUser | null> = computed(() => {
     const post = this.selectedFromList() ?? this.postDetailResource.value() ?? null;
     const users = this.usersMap();
 
@@ -77,19 +92,16 @@ export class PostsDataService {
     const author = users[post.user_id];
 
     return {
-      id: post.id,
-      title: post.title,
-      body: post.body,
-      createdAt: post.created_at,
-      authorName: author?.name ?? 'Unknown',
-      authorEmail: author?.email ?? null,
+      ...post,
+      author_name: author?.name ?? 'Unknown',
+      author_email: author?.email ?? null,
     };
   });
 
   /*** HELPER SIGNALS ***/
   readonly selectedFromList = computed(() => {
     const id = this.selectedPostId();
-    const posts = this.postsResource.value();
+    const posts = this.posts();
 
     if (!id || !posts) return null;
 
@@ -97,7 +109,7 @@ export class PostsDataService {
   });
 
   readonly missingUserIds = computed(() => {
-    const posts = this.postsResource.value() ?? [];
+    const posts = this.posts();
     const detail = this.postDetailResource.value();
     const users = this.usersMap();
 
@@ -116,38 +128,73 @@ export class PostsDataService {
 
   constructor() {
     effect(() => {
-      const posts = this.postsResource.value() ?? [];
-      const detail = this.postDetailResource.value();
+      const newPosts = this.postsResource.value();
+      if (!newPosts?.length) return;
 
-      const allUserIds = new Set<number>();
-
-      posts.forEach((p) => allUserIds.add(p.user_id));
-      if (detail) allUserIds.add(detail.user_id);
-
-      const users = this.usersMap();
-
-      const missingIds = [...allUserIds].filter((id) => users[id] === undefined);
-
-      if (!missingIds.length) return;
-
-      forkJoin(
-        missingIds.map((id) =>
-          this.usersApi.getUser(id).pipe(
-            map((user) => ({ id, user })),
-            catchError(() => of({ id, user: null })),
-          ),
-        ),
-      )
-        .pipe(first())
-        .subscribe((results) => {
-          this.usersMap.update((prev) => {
-            const updated = { ...prev };
-            results.forEach(({ id, user }) => {
-              updated[id] = user;
-            });
-            return updated;
-          });
-        });
+      this.posts.update(prev => {
+        const existingIds = new Set(prev.map(p => p.id));
+        const filtered = newPosts.filter(p => !existingIds.has(p.id));
+        return [...prev, ...filtered];
+      });
     });
+
+    effect(() => {
+      const results = this.usersBatchResource.value();
+      if (!results?.length) return;
+
+      this.usersMap.update((prev) => {
+        const updated = { ...prev };
+        results.forEach(({ id, user }) => {
+          updated[id] = user;
+        });
+        return updated;
+      });
+    });
+
+    // effect(() => {
+    //   const posts = this.posts() ?? [];
+    //   const detail = this.postDetailResource.value();
+    //
+    //   const allUserIds = new Set<number>();
+    //
+    //   posts.forEach((p) => allUserIds.add(p.user_id));
+    //   if (detail) allUserIds.add(detail.user_id);
+    //
+    //   const users = this.usersMap();
+    //
+    //   const missingIds = [...allUserIds].filter(
+    //     (id) =>
+    //       users[id] === undefined &&
+    //       !this.loadingUsers.has(id)
+    //   );
+    //
+    //   if (!missingIds.length) return;
+    //
+    //   missingIds.forEach(id => this.loadingUsers.add(id));
+    //
+    //   forkJoin(
+    //     missingIds.map((id) =>
+    //       this.usersApi.getUser(id).pipe(
+    //         map((user) => ({ id, user })),
+    //         catchError(() => of({ id, user: null })),
+    //       ),
+    //     ),
+    //   )
+    //     .pipe(first())
+    //     .subscribe((results) => {
+    //       this.usersMap.update((prev) => {
+    //         const updated = { ...prev };
+    //         results.forEach(({ id, user }) => {
+    //           updated[id] = user;
+    //           this.loadingUsers.delete(id);
+    //         });
+    //         return updated;
+    //       });
+    //     });
+    // });
+  }
+
+  onScrollDown() {
+    this.page.set(this.page() + 1);
   }
 }
