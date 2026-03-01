@@ -54,14 +54,15 @@ export class PostsService {
   //   return this.httpClient.get<number>(`${API_SERVER}/post/${postId}/comment/count`);
   // }
   //
-  // /**
-  //  * Creates post.
-  //  * @param post Post to create.
-  //  * @return {Observable} of void.
-  //  */
-  // public createPost(post: Post): Observable<void> {
-  //   return this.httpClient.put<void>(`${API_SERVER}/post`, post);
-  // }
+  /**
+   * Creates post.
+   * @param userId User ID.
+   * @param post Post to create.
+   * @return {Observable} of void.
+   */
+  public createPost(userId: number, post: Post): Observable<void> {
+    return this.httpClient.post<void>(`${environment.api}/users/${userId}/posts`, post);
+  }
   //
   // /**
   //  * Updates post.
@@ -82,14 +83,14 @@ export class PostsService {
   //   return this.httpClient.put<void>(`${API_SERVER}/post/${postId}/comment`, comment);
   // }
   //
-  // /**
-  //  * Deletes post by id.
-  //  * @param id Id of post.
-  //  * @return {Observable} of void.
-  //  */
-  // public deletePost(id: number): Observable<void> {
-  //   return this.httpClient.delete<void>(`${API_SERVER}/post/${id}`);
-  // }
+  /**
+   * Deletes post by id.
+   * @param id Id of post.
+   * @return {Observable} of void.
+   */
+  public deletePost(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${environment.api}/posts/${id}`);
+  }
   //
   // /**
   //  * Deletes comment by id.

@@ -2,7 +2,7 @@
 import { PostsService } from './posts.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { UsersService } from './users.service';
-import { catchError, delay, EMPTY, first, forkJoin, map, of } from 'rxjs';
+import { catchError, delay, first, forkJoin, map, of, tap } from 'rxjs';
 import { User } from '../models/users.model';
 import { Post, PostUser } from '../models/posts.model';
 
@@ -15,6 +15,7 @@ export class PostsDataService {
   private perPage = 10; // number of posts per page
   private loadingUsers = new Set<number>();
   private detailResolved = signal(false);
+  private refreshTick = signal(0);
 
   readonly posts = signal<Post[]>([]);
   readonly selectedPostId = signal<number | null>(null);
@@ -42,7 +43,7 @@ export class PostsDataService {
       return id;
     },
     stream: ({ params: id }) => {
-      return id ? this.postsApi.getPost(id) : of(null);
+      return id ? this.postsApi.getPost(id).pipe(catchError(() => of(null))) : of(null);
     },
   });
 
@@ -77,7 +78,7 @@ export class PostsDataService {
   /*** VIEWMODELS ***/
   readonly postsVm = computed(() => {
     const users = this.usersMap();
-    return this.posts().map(post => ({
+    return this.posts().map((post) => ({
       ...post,
       author_name: users[post.user_id]?.name ?? 'Unknown',
     }));
@@ -131,9 +132,9 @@ export class PostsDataService {
       const newPosts = this.postsResource.value();
       if (!newPosts?.length) return;
 
-      this.posts.update(prev => {
-        const existingIds = new Set(prev.map(p => p.id));
-        const filtered = newPosts.filter(p => !existingIds.has(p.id));
+      this.posts.update((prev) => {
+        const existingIds = new Set(prev.map((p) => p.id));
+        const filtered = newPosts.filter((p) => !existingIds.has(p.id));
         return [...prev, ...filtered];
       });
     });
@@ -192,6 +193,24 @@ export class PostsDataService {
     //       });
     //     });
     // });
+  }
+
+  // createPost(post: Partial<Post>) {
+  //   return this.postsApi.createPost(this.selectedPostId(), post).pipe(
+  //     tap(() => {
+  //       // trigger refetch
+  //       this.refreshTick.update(v => v + 1);
+  //     })
+  //   );
+  // }
+
+  deletePost(id: number) {
+    return this.postsApi.deletePost(id).pipe(
+      tap(() => {
+        // trigger refetch
+        this.refreshTick.update((v) => v + 1);
+      }),
+    );
   }
 
   onScrollDown() {

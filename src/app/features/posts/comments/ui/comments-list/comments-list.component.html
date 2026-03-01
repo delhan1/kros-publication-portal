@@ -1,9 +1,9 @@
-@let loading = commentsDataStore.commentsResource.isLoading();
-@let comments = commentsDataStore.commentsResource.value();
+@let loading = commentsDataService.commentsResource.isLoading();
+@let comments = commentsDataService.commentsResource.value();
 
 <div class="d-flex justify-content-between mb-2">
-    <h6>{{ 'comments.title' | translate }}</h6>
-    <button matButton="filled" (click)="openAddCommentDialog()">{{ 'common.add' | translate }}</button>
+  <h6>{{ 'comments.title' | translate }}</h6>
+  <button matButton="filled" (click)="openAddCommentDialog()">{{ 'common.add' | translate }}</button>
 </div>
 
 <div class="d-grid gap-3 column-gap-3 overflow-auto">
@@ -20,16 +20,18 @@
   @for (comment of comments; track comment.id) {
     <mat-card class="item-card mat-mdc-elevation-z0" appearance="outlined">
       <div class="d-flex justify-content-between">
-        <mat-card-header class="justify-content-between">
+        <mat-card-header class="justify-content-between w-100">
           <img mat-card-avatar [src]="'assets/images/default.png'" alt="Image of user" />
-          <mat-card-title>
+          <mat-card-title class="d-flex justify-content-between">
             <span>{{ comment.name }}</span>
-            <button
-              mat-icon-button
-              matTooltip="{{ 'common.delete' | translate }}"
-              (click)="openDeleteCommentDialog(comment.id)">
-              <mat-icon>delete</mat-icon>
-            </button>
+            <div>
+              <button
+                mat-icon-button
+                matTooltip="{{ 'common.delete' | translate }}"
+                (click)="openDeleteCommentDialog(comment.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </mat-card-title>
           <mat-card-subtitle>{{ comment.created_at ? (comment.created_at | date) : '???' }}</mat-card-subtitle>
         </mat-card-header>

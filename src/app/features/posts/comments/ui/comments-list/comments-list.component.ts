@@ -30,13 +30,13 @@ import { Comment } from '../../models/comments.model';
 export class CommentsListComponent {
   activePostId = input.required<number>();
 
-  commentsDataStore = inject(CommentsDataService);
+  commentsDataService = inject(CommentsDataService);
   private dialog = inject(MatDialog);
   private snackBar = inject(SnackbarService);
 
   constructor() {
     effect(() => {
-      this.commentsDataStore.selectedPostId.set(this.activePostId());
+      this.commentsDataService.selectedPostId.set(this.activePostId());
     });
   }
 
@@ -61,7 +61,7 @@ export class CommentsListComponent {
         first(),
         switchMap((result) => {
           if (result === 'confirm') {
-            return this.commentsDataStore.deleteComment(id);
+            return this.commentsDataService.deleteComment(id);
           } else {
             return EMPTY;
           }
@@ -94,7 +94,7 @@ export class CommentsListComponent {
             const comment: Partial<Comment> = {
               body: result.body,
             };
-            return this.commentsDataStore.createComment(comment);
+            return this.commentsDataService.createComment(comment);
           } else {
             return EMPTY;
           }
