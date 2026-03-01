@@ -78,14 +78,14 @@ export class CommentsService {
   //   return this.httpClient.put<void>(`${API_SERVER}/comment/${commentId}/comment`, comment);
   // }
   //
-  // /**
-  //  * Deletes comment by id.
-  //  * @param id Id of comment.
-  //  * @return {Observable} of void.
-  //  */
-  // public deleteComment(id: number): Observable<void> {
-  //   return this.httpClient.delete<void>(`${API_SERVER}/comment/${id}`);
-  // }
+  /**
+   * Deletes comment by id.
+   * @param id Id of comment.
+   * @return {Observable} of void.
+   */
+  public deleteComment(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${environment.api}/comments/${id}`);
+  }
   //
   // /**
   //  * Deletes comment by id.

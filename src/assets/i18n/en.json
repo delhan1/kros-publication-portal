@@ -44,7 +44,7 @@
     "name": "Name",
     "dialog": {
       "title": "Delete this comment?",
-      "message": "Do you really want to delete comment \"{{value}}\"?"
+      "message": "Do you really want to delete this comment?"
     },
     "info": {
       "created": "Comment added.",

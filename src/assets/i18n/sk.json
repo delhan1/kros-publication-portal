@@ -44,7 +44,7 @@
     "name": "Meno",
     "dialog": {
       "title": "Odstrániť tento komentár?",
-      "message": "Naozaj chcete odstrániť komentár \"{{value}}\"?"
+      "message": "Naozaj chcete odstrániť tento komentár?"
     },
     "info": {
       "created": "Komentár pridaný.",

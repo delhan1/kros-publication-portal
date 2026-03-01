@@ -7,6 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { DatePipe } from '@angular/common';
 import { CommentsDataService } from '../../data-access/comments.data';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  ConfirmActionDialogComponent,
+  ConfirmActionDialogData,
+} from '../../../../../shared/ui/confirm-action-dialog/confirm-action-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { catchError, EMPTY, first, switchMap, tap, throwError } from 'rxjs';
+import { SnackbarService } from '../../../../../shared/ui/info-snackbar/snackbar.service';
 
 @Component({
   selector: 'app-comments-list',
@@ -19,6 +26,8 @@ export class CommentsListComponent {
   activePostId = input.required<number>();
 
   commentsDataStore = inject(CommentsDataService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(SnackbarService);
 
   constructor() {
     effect(() => {
@@ -29,9 +38,36 @@ export class CommentsListComponent {
   /**
    * Opens dialog for deleting comment by provided id.
    * @param id Id of comment.
-   * @param name Name of deleted comment.
    */
   public openDeleteCommentDialog(id: number): void {
-    
+    const dialogData: ConfirmActionDialogData = {
+      color: 'warn',
+      titleKey: 'comments.dialog.title',
+      messageKey: 'comments.dialog.message',
+      confirmKey: 'common.delete',
+    };
+    const dialogRef: MatDialogRef<ConfirmActionDialogComponent> = this.dialog.open(ConfirmActionDialogComponent, {
+      data: dialogData,
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        switchMap((result) => {
+          if (result === 'confirm') {
+            return this.commentsDataStore.deleteComment(id);
+          } else {
+            return EMPTY;
+          }
+        }),
+        tap(() => this.snackBar.showInfoMessage('comments.info.deleted')),
+        catchError((err) => {
+          this.snackBar.showInfoMessage('errors.unexpectedErrorOccurred');
+          console.error('err', err);
+          return throwError(err);
+        }),
+      )
+      .subscribe();
   }
 }
