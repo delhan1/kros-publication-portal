@@ -19,6 +19,7 @@
     "title": "Články",
     "create": "Vytvoriť článok",
     "name": "Názov",
+    "filter": "Filtrovať podľa ID používateľa",
     "detail": {
       "title": "Detail článku",
       "detail": "Detail",

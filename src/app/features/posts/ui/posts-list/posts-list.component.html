@@ -1,5 +1,9 @@
+<mat-form-field class="w-100">
+  <input type="text" matInput placeholder="{{ 'posts.filter' | translate }}" [formControl]="filterControl" />
+</mat-form-field>
+
 @if (!data.loading() && !data.postsVm().length) {
-  <div class="p-4 text-gray-500">
+  <div class="p-4 text-gray-500 text-center">
     {{ 'posts.info.noItems' | translate }}
   </div>
 }
@@ -13,7 +17,7 @@
         [routerLink]="'/posts/' + post.id">
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title>{{ post.title }} {{ post.id }} {{data.loading()}}</mat-card-title>
+          <mat-card-title>{{ post.title }} {{ post.id }} {{ data.loading() }}</mat-card-title>
           <mat-card-subtitle>
             {{ post.author_name }} •
             <span class="text-muted fw-light">{{ post.created_at ? (post.created_at | date) : '???' }}</span>

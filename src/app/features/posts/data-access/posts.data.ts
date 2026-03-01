@@ -18,12 +18,29 @@ export class PostsDataService {
   private refreshTick = signal(0);
 
   readonly posts = signal<Post[]>([]);
+  readonly authorFilter = signal<number | null>(null);
   readonly selectedPostId = signal<number | null>(null);
 
   /*** RESOURCES ***/
   readonly postsResource = rxResource({
-    params: () => this.page(),
-    stream: ({ params: page }) => this.postsApi.getPosts(page, this.perPage).pipe(delay(3000)),
+    params: () => ({
+      page: this.page(),
+      authorId: this.authorFilter(),
+    }),
+    stream: ({ params }) => {
+      if (params.authorId) {
+        return this.postsApi.getPostsByUser(
+          params.authorId,
+          params.page,
+          this.perPage
+        );
+      }
+
+      return this.postsApi.getPosts(
+        params.page,
+        this.perPage
+      );
+    },
   });
 
   readonly postDetailResource = rxResource({
@@ -203,6 +220,11 @@ export class PostsDataService {
   //     })
   //   );
   // }
+  setAuthorFilter(id: number | null) {
+    this.authorFilter.set(id);
+    this.page.set(1);
+    this.posts.set([]);
+  }
 
   deletePost(id: number) {
     return this.postsApi.deletePost(id).pipe(

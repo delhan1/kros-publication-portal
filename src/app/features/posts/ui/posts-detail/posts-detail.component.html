@@ -1,10 +1,14 @@
-@if (postsDataService.detailLoading()) {
-  <mat-progress-spinner [diameter]="50" color="primary" mode="indeterminate"></mat-progress-spinner>
+@let loading = postsDataService.detailLoading();
+
+@if (loading) {
+  <div class="d-flex justify-content-center">
+    <mat-progress-spinner [diameter]="50" color="primary" mode="indeterminate"></mat-progress-spinner>
+  </div>
 }
 
 @let post = postsDataService.postDetailVm();
 
-@if (post) {
+@if (post && !loading) {
   <mat-card class="example-card" appearance="outlined">
     <mat-card-header>
       <mat-card-title class="d-flex justify-content-between">
@@ -26,7 +30,7 @@
     <mat-card-content>
       <p>{{ post.body }}</p>
       <mat-divider class="mb-2"></mat-divider>
-      
+
       <app-comments-list [activePostId]="post.id"></app-comments-list>
     </mat-card-content>
   </mat-card>

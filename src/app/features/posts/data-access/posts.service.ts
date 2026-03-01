@@ -28,6 +28,24 @@ export class PostsService {
   }
 
   /**
+   * Gets all posts.
+   * @param userId
+   * @param page Page number.
+   * @param perPage Number of posts per page.
+   * @return {Observable} of posts.
+   */
+  public getPostsByUser(userId: number, page: number, perPage: number): Observable<Post[]> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('per_page', perPage);
+
+    return this.httpClient.get<Post[]>(
+      `${environment.api}/users/${userId}/posts`,
+      { params }
+    );
+  }
+
+  /**
    * Gets post by id.
    * @param id Id of post.
    * @return {Observable} of posts.

@@ -19,6 +19,7 @@
     "title": "Posts",
     "create": "Create post",
     "name": "Name",
+    "filter": "Filter by user ID",
     "detail": {
       "title": "Post detail",
       "detail": "Detail",
