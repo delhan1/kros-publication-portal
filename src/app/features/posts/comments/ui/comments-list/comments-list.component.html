@@ -1,6 +1,11 @@
 @let loading = commentsDataStore.commentsResource.isLoading();
 @let comments = commentsDataStore.commentsResource.value();
 
+<div class="d-flex justify-content-between mb-2">
+    <h6>{{ 'comments.title' | translate }}</h6>
+    <button matButton="filled" (click)="openAddCommentDialog()">{{ 'common.add' | translate }}</button>
+</div>
+
 <div class="d-grid gap-3 column-gap-3 overflow-auto">
   @if (loading) {
     <div class="d-flex justify-content-center">

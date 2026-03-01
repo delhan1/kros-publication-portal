@@ -50,14 +50,15 @@ export class CommentsService {
   //   return this.httpClient.get<number>(`${API_SERVER}/comment/${commentId}/comment/count`);
   // }
   //
-  // /**
-  //  * Creates comment.
-  //  * @param comment Comment to create.
-  //  * @return {Observable} of void.
-  //  */
-  // public createComment(comment: Comment): Observable<void> {
-  //   return this.httpClient.put<void>(`${API_SERVER}/comment`, comment);
-  // }
+  /**
+   * Creates comment.
+   * @param postId Post ID.
+   * @param comment Comment to create.
+   * @return {Observable} of void.
+   */
+  public createComment(postId: number, comment: Partial<Comment>): Observable<void> {
+    return this.httpClient.post<void>(`${environment.api}/posts/${postId}/comments`, comment);
+  }
   //
   // /**
   //  * Updates comment.

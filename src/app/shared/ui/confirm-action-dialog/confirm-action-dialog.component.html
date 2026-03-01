@@ -4,7 +4,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close tabindex="-1">{{ 'common.cancel' | translate }}</button>
-  <button mat-raised-button matDialogClose="confirm" [color]="data.color" tabindex="2">
+  <button mat-button mat-dialog-close="confirm" [color]="data.color" tabindex="2">
     {{ data.confirmKey | lowercase | translate }}
   </button>
 </mat-dialog-actions>

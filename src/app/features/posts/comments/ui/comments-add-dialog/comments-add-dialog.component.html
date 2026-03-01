@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>{{ 'comments.create' | translate }}</h1>
+<mat-dialog-content>
+  <form [formGroup]="addCommentForm" (ngSubmit)="submitHandler()" class="d-flex flex-column">
+    <mat-form-field>
+      <mat-label>{{ 'common.text' | translate }}</mat-label>
+      <textarea
+        matInput
+        rows="5"
+        placeholder="{{ 'common.text' | translate }}"
+        formControlName="body"
+        required></textarea>
+
+      <!-- input field error -->
+      @if (bodyControl.invalid) {
+        <mat-error>
+          <span [hidden]="!bodyControl.errors?.['required']">
+            {{ 'errors.thisFieldIsRequired' | translate }}
+          </span>
+        </mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button" mat-button mat-dialog-close tabindex="-1">{{ 'common.cancel' | translate }}</button>
+  <button
+    type="submit"
+    class="mat-spinner-button"
+    matButton="filled"
+    color="primary"
+    [disabled]="addCommentForm.invalid"
+    (click)="submitHandler()">
+    {{ 'common.add' | translate }}
+  </button>
+</mat-dialog-actions>

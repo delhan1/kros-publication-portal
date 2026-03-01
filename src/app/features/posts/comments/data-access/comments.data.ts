@@ -2,6 +2,7 @@
 import { rxResource } from '@angular/core/rxjs-interop';
 import { delay, tap } from 'rxjs';
 import { CommentsService } from './comments.service';
+import { Comment } from '../models/comments.model';
 
 @Injectable()
 export class CommentsDataService {
@@ -17,6 +18,15 @@ export class CommentsDataService {
     params: () => ({ postId: this.selectedPostId(), page: this.page(), refresh: this.refreshTick() }),
     stream: ({ params: { postId, page } }) => this.commentsApi.getComments(postId, page, this.perPage),
   });
+
+  createComment(comment: Partial<Comment>) {
+    return this.commentsApi.createComment(this.selectedPostId(), comment).pipe(
+      tap(() => {
+        // trigger refetch
+        this.refreshTick.update(v => v + 1);
+      })
+    );
+  }
 
   deleteComment(id: number) {
     return this.commentsApi.deleteComment(id).pipe(

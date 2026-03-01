@@ -14,6 +14,11 @@ import {
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { catchError, EMPTY, first, switchMap, tap, throwError } from 'rxjs';
 import { SnackbarService } from '../../../../../shared/ui/info-snackbar/snackbar.service';
+import {
+  CommentsAddDialogComponent,
+  CreateDialogResultData,
+} from '../comments-add-dialog/comments-add-dialog.component';
+import { Comment } from '../../models/comments.model';
 
 @Component({
   selector: 'app-comments-list',
@@ -62,6 +67,39 @@ export class CommentsListComponent {
           }
         }),
         tap(() => this.snackBar.showInfoMessage('comments.info.deleted')),
+        catchError((err) => {
+          this.snackBar.showInfoMessage('errors.unexpectedErrorOccurred');
+          console.error('err', err);
+          return throwError(err);
+        }),
+      )
+      .subscribe();
+  }
+
+  /**
+   * Opens dialog for creating comment.
+   */
+  public openAddCommentDialog(): void {
+    const dialogRef: MatDialogRef<CommentsAddDialogComponent> = this.dialog.open(CommentsAddDialogComponent, {
+      width: '500px',
+    });
+
+    let commentName: string = '';
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        switchMap((result: CreateDialogResultData) => {
+          if (result) {
+            const comment: Partial<Comment> = {
+              body: result.body,
+            };
+            return this.commentsDataStore.createComment(comment);
+          } else {
+            return EMPTY;
+          }
+        }),
+        tap(() => this.snackBar.showInfoMessage('comments.info.created', { value: commentName })),
         catchError((err) => {
           this.snackBar.showInfoMessage('errors.unexpectedErrorOccurred');
           console.error('err', err);
