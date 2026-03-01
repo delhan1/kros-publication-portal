@@ -1,0 +1,39 @@
+@let loading = commentsDataStore.commentsResource.isLoading();
+@let comments = commentsDataStore.commentsResource.value();
+
+<div class="d-grid gap-3 column-gap-3 overflow-auto">
+  @if (loading) {
+    <div class="d-flex justify-content-center">
+      <mat-progress-spinner [diameter]="40" color="primary" mode="indeterminate"></mat-progress-spinner>
+    </div>
+  }
+
+  @if (!loading && !comments?.length) {
+    <p class="m-10 text-center">{{ 'comments.info.noItems' | translate }}</p>
+  }
+
+  @for (comment of comments; track comment.id) {
+    <mat-card class="item-card mat-mdc-elevation-z0" appearance="outlined">
+      <div class="d-flex justify-content-between">
+        <mat-card-header class="justify-content-between">
+          <img mat-card-avatar [src]="'assets/images/default.png'" alt="Image of user" />
+          <mat-card-title>
+            <span>{{ comment.name }}</span>
+            <button
+              mat-icon-button
+              matTooltip="{{ 'common.delete' | translate }}"
+              (click)="openDeleteCommentDialog(comment.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-title>
+          <mat-card-subtitle>{{ comment.created_at ? (comment.created_at | date) : '???' }}</mat-card-subtitle>
+        </mat-card-header>
+      </div>
+      <mat-card-content>
+        <p>
+          {{ comment.body }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

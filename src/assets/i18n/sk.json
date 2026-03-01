@@ -47,8 +47,8 @@
       "message": "Naozaj chcete odstrániť komentár \"{{value}}\"?"
     },
     "info": {
-      "created": "Komentár \"{{value}}\" pridaný.",
-      "deleted": "Komentár \"{{value}}\" odstránený.",
+      "created": "Komentár pridaný.",
+      "deleted": "Komentár odstránený.",
       "noItems": "Neboli nájdené žiadne komentáre."
     }
   },

@@ -47,8 +47,8 @@
       "message": "Do you really want to delete comment \"{{value}}\"?"
     },
     "info": {
-      "created": "Comment \"{{value}}\" added.",
-      "deleted": "Comment \"{{value}}\" deleted.",
+      "created": "Comment added.",
+      "deleted": "Comment deleted.",
       "noItems": "No comments found."
     }
   },
