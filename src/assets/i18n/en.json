@@ -88,6 +88,7 @@
     "unexpectedErrorOccurred": "An unexpected error occurred.",
     "userNotFound": "The user was not found.",
     "failedToLoadPosts": "Failed to load posts.",
-    "failedToLoadComments": "Failed to load comments."
+    "failedToLoadComments": "Failed to load comments.",
+    "userNotLoggedIn": "User not logged in."
   }
 }

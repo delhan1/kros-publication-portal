@@ -2,6 +2,7 @@
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { SnackbarService } from '../../shared/ui/info-snackbar/snackbar.service';
+import { AuthRequiredError } from '../auth/errors/auth-required.error';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const snackbar = inject(SnackbarService);
@@ -11,16 +12,16 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       let messageKey = 'errors.unexpectedErrorOccurred';
 
+      if (error instanceof AuthRequiredError || error.status === 401) {
+        messageKey = 'errors.userNotLoggedIn';
+      }
+      
       if (error.status === 0) {
         messageKey = 'errors.network';
       }
 
-      if (error.status === 401) {
-        messageKey = 'errors.unauthorized';
-      }
-
       if (error.status === 404) {
-        messageKey = 'errors.notFound';
+        messageKey = 'errors.404';
       }
 
       snackbar.showInfoMessage(messageKey);

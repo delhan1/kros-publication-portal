@@ -88,6 +88,7 @@
     "unexpectedErrorOccurred": "Nastala neočakávaná chyba.",
     "userNotFound": "Používateľ nebol nájdený.",
     "failedToLoadPosts": "Nepodarilo sa načítať články.",
-    "failedToLoadComments": "Nepodarilo sa načítať komentáre."
+    "failedToLoadComments": "Nepodarilo sa načítať komentáre.",
+    "userNotLoggedIn": "Používateľ nie je prihlásený."
   }
 }

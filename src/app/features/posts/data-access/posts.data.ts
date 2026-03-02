@@ -2,10 +2,11 @@
 import { PostsService } from './posts.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { UsersService } from './users.service';
-import { catchError, first, forkJoin, map, of, tap } from 'rxjs';
+import { catchError, first, forkJoin, map, of, tap, throwError } from 'rxjs';
 import { User } from '../models/users.model';
 import { Post, PostUser } from '../models/posts.model';
 import { AuthStore } from '../../../core/auth/auth.store';
+import { AuthRequiredError } from '../../../core/auth/errors/auth-required.error';
 
 @Injectable()
 export class PostsDataService {
@@ -211,9 +212,11 @@ export class PostsDataService {
 
   createPost(post: Partial<Post>) {
     const user = this.authStore.currentUser();
-    if (!user) throw new Error('Not logged in');
+    if (!user) {
+      return throwError(() => new AuthRequiredError());
+    }
 
-    return this.postsApi.createPost(user?.id, post).pipe(
+    return this.postsApi.createPost(user.id, post).pipe(
       tap(() => {
         // trigger refetch
         this.refreshTick.update((v) => v + 1);
@@ -222,9 +225,6 @@ export class PostsDataService {
   }
 
   updatePost(post: Partial<Post>) {
-    const user = this.authStore.currentUser();
-    if (!user) throw new Error('Not logged in');
-
     return this.postsApi.updatePost(post).pipe(
       tap(() => {
         // trigger refetch
