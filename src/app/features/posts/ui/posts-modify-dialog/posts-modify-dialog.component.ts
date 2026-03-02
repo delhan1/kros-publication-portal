@@ -4,15 +4,16 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { Post } from '../../models/posts.model';
 
-export interface CreateDialogData {
+export interface PostsModifyDialogData {
   titleKey: string;
-  nameKey: string;
   confirmKey: string;
+  post?: Post;
 }
 
-export interface CreateDialogResultData {
-  name: string;
+export interface PostsModifyDialogResultData {
+  title: string;
   body: string;
 }
 
@@ -28,25 +29,25 @@ export interface CreateDialogResultData {
     MatError,
     MatLabel,
   ],
-  templateUrl: './posts-add-dialog.component.html',
-  styleUrl: './posts-add-dialog.component.scss',
+  templateUrl: './posts-modify-dialog.component.html',
+  styleUrl: './posts-modify-dialog.component.scss',
 })
-export class PostsAddDialogComponent {
+export class PostsModifyDialogComponent {
   addCommentForm: FormGroup;
-  data: CreateDialogData = inject(MAT_DIALOG_DATA);
-  readonly nameControl;
+  readonly titleControl;
   readonly bodyControl;
 
+  data: PostsModifyDialogData = inject(MAT_DIALOG_DATA);
   private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<PostsAddDialogComponent>);
+  private dialogRef = inject(MatDialogRef<PostsModifyDialogComponent>);
 
   constructor() {
     this.addCommentForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(255)]],
-      body: ['', [Validators.required]],
+      title: [this.data.post?.title ?? '', [Validators.required, Validators.maxLength(255)]],
+      body: [this.data.post?.body ?? '', [Validators.required]],
     });
 
-    this.nameControl = this.addCommentForm.controls['name'];
+    this.titleControl = this.addCommentForm.controls['title'];
     this.bodyControl = this.addCommentForm.controls['body'];
   }
 

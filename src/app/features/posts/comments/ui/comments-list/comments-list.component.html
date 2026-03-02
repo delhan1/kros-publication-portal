@@ -1,19 +1,26 @@
 @let loading = commentsDataService.commentsResource.isLoading();
-@let comments = commentsDataService.commentsResource.value();
+@let error = commentsDataService.commentsResource.error();
+@let comments = commentsDataService.comments();
 
 <div class="d-flex justify-content-between mb-2">
   <h6>{{ 'comments.title' | translate }}</h6>
-  <button matButton="filled" (click)="openAddCommentDialog()">{{ 'common.add' | translate }}</button>
+  <button matButton="filled" (click)="openAddCommentDialog()">{{ 'comments.create' | translate }}</button>
 </div>
 
 <div class="d-grid gap-3 column-gap-3 overflow-auto">
-  @if (loading) {
+  @if (loading && !error) {
     <div class="d-flex justify-content-center">
       <mat-progress-spinner [diameter]="40" color="primary" mode="indeterminate"></mat-progress-spinner>
     </div>
   }
+    
+  @if (error) {
+    <span class="p-4 text-danger text-center">
+      {{ 'errors.failedToLoadComments' | translate }}
+    </span>
+  }
 
-  @if (!loading && !comments?.length) {
+  @if (!loading && !comments?.length && !error) {
     <p class="m-10 text-center">{{ 'comments.info.noItems' | translate }}</p>
   }
 

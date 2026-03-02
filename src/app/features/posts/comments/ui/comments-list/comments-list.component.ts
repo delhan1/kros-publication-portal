@@ -16,9 +16,10 @@ import { catchError, EMPTY, first, switchMap, tap, throwError } from 'rxjs';
 import { SnackbarService } from '../../../../../shared/ui/info-snackbar/snackbar.service';
 import {
   CommentsAddDialogComponent,
-  CreateDialogResultData,
+  CommentsAddDialogResultData,
 } from '../comments-add-dialog/comments-add-dialog.component';
 import { Comment } from '../../models/comments.model';
+import { AuthStore } from '../../../../../core/auth/auth.store';
 
 @Component({
   selector: 'app-comments-list',
@@ -31,6 +32,7 @@ export class CommentsListComponent {
   activePostId = input.required<number>();
 
   commentsDataService = inject(CommentsDataService);
+  private authStore = inject(AuthStore);
   private dialog = inject(MatDialog);
   private snackBar = inject(SnackbarService);
 
@@ -84,22 +86,28 @@ export class CommentsListComponent {
       width: '500px',
     });
 
-    let commentName: string = '';
     dialogRef
       .afterClosed()
       .pipe(
         first(),
-        switchMap((result: CreateDialogResultData) => {
+        switchMap((result: CommentsAddDialogResultData) => {
           if (result) {
-            const comment: Partial<Comment> = {
-              body: result.body,
-            };
-            return this.commentsDataService.createComment(comment);
+            const user = this.authStore.currentUser();
+            if (user) {
+              const comment: Partial<Comment> = {
+                body: result.body,
+                name: user.name,
+                email: user.email,
+              };
+              return this.commentsDataService.createComment(comment);
+            } else {
+              throw new Error('Not logged in');
+            }
           } else {
             return EMPTY;
           }
         }),
-        tap(() => this.snackBar.showInfoMessage('comments.info.created', { value: commentName })),
+        tap(() => this.snackBar.showInfoMessage('comments.info.created')),
         catchError((err) => {
           this.snackBar.showInfoMessage('errors.unexpectedErrorOccurred');
           console.error('err', err);

@@ -1,4 +1,4 @@
-﻿import { inject, Injectable, signal } from '@angular/core';
+﻿import { computed, inject, Injectable, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { delay, tap } from 'rxjs';
 import { CommentsService } from './comments.service';
@@ -17,6 +17,11 @@ export class CommentsDataService {
   readonly commentsResource = rxResource({
     params: () => ({ postId: this.selectedPostId(), page: this.page(), refresh: this.refreshTick() }),
     stream: ({ params: { postId, page } }) => this.commentsApi.getComments(postId, page, this.perPage),
+  });
+  
+  readonly comments = computed(() => {
+    if (this.commentsResource.error()) return [];
+    return this.commentsResource.value() ?? [];
   });
 
   createComment(comment: Partial<Comment>) {

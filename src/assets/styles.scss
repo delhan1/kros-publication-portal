@@ -22,7 +22,7 @@ body {
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the
   // user's system settings.
-  color-scheme: light;
+  color-scheme: light dark;
 
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
@@ -34,6 +34,10 @@ body {
   // Reset the user agent margin.
   margin: 0;
   height: 100%;
+
+  &.dark-mode {
+    color-scheme: dark;
+  }
 
   .mat-icon {
     transform: scale(0.8);
@@ -53,10 +57,10 @@ body {
       .sidebar {
         width: 250px;
 
-        //.selected {
-        //  background-color: rgba(mat-color($primary), 0.12);
-        //  color: mat-color($primary);
-        //}
+        .selected {
+          background-color: var(--mat-sys-secondary-container);
+          color: var(--mat-sys-primary);
+        }
       }
     }
 
@@ -68,8 +72,20 @@ body {
       }
     }
   }
-  
+
+  .mat-mdc-card.selected {
+    @include mat.card-overrides(
+      (
+        elevated-container-color: var(--mat-sys-secondary-container),
+      )
+    );
+  }
+
   .mat-mdc-card-header-text {
     width: 100%;
+  }
+
+  .mat-mdc-form-field.ng-invalid:not(:last-of-type) {
+    margin-bottom: 1rem;
   }
 }

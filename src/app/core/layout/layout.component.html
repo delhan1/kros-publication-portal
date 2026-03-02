@@ -3,16 +3,15 @@
     <button mat-icon-button class="me-3" (click)="navigation.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <app-header class="w-100"></app-header>
+    <app-header class="flex-grow-1 min-w-0"></app-header>
   </mat-toolbar>
-
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav
       #navigation
       id="navigation"
       class="sidebar"
-      [mode]="menuHidden ? 'over' : 'side'"
-      [opened]="!menuHidden"
+      [mode]="isMobile() ? 'over' : 'side'"
+      [opened]="!isMobile()"
       fixedTopGap="0">
       <app-sidebar></app-sidebar>
     </mat-sidenav>

@@ -14,8 +14,14 @@ import {
   ConfirmActionDialogData,
 } from '../../../../shared/ui/confirm-action-dialog/confirm-action-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { catchError, EMPTY, first, switchMap, tap, throwError } from 'rxjs';
+import { catchError, EMPTY, first, map, switchMap, tap, throwError } from 'rxjs';
 import { SnackbarService } from '../../../../shared/ui/info-snackbar/snackbar.service';
+import {
+  PostsModifyDialogComponent,
+  PostsModifyDialogData,
+  PostsModifyDialogResultData,
+} from '../posts-modify-dialog/posts-modify-dialog.component';
+import { Post } from '../../models/posts.model';
 
 @Component({
   selector: 'app-posts-detail',
@@ -38,6 +44,46 @@ export class PostsDetailComponent {
 
   private dialog = inject(MatDialog);
   private snackBar = inject(SnackbarService);
+
+  /**
+   * Opens dialog for editing post.
+   */
+  public openEditPostDialog(post: Post): void {
+    const dialogData: PostsModifyDialogData = {
+      titleKey: 'posts.edit',
+      confirmKey: 'common.edit',
+      post,
+    };
+    const dialogRef: MatDialogRef<PostsModifyDialogComponent> = this.dialog.open(PostsModifyDialogComponent, {
+      width: '500px',
+      data: dialogData,
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        switchMap((result: PostsModifyDialogResultData) => {
+          if (result) {
+            const resultPost: Partial<Post> = {
+              id: post.id,
+              title: result.title,
+              body: result.body,
+            };
+            return this.postsDataService.updatePost(resultPost).pipe(map(() => resultPost.title as string));
+          } else {
+            return EMPTY;
+          }
+        }),
+        tap((title) => this.snackBar.showInfoMessage('posts.info.updated', { value: title })),
+        catchError((err) => {
+          this.snackBar.showInfoMessage('errors.unexpectedErrorOccurred');
+          console.error('err', err);
+          return throwError(err);
+        }),
+      )
+      .subscribe();
+  }
 
   /**
    * Opens dialog for deleting post by provided id.

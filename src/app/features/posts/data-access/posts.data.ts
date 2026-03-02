@@ -2,14 +2,16 @@
 import { PostsService } from './posts.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { UsersService } from './users.service';
-import { catchError, delay, first, forkJoin, map, of, tap } from 'rxjs';
+import { catchError, first, forkJoin, map, of, tap } from 'rxjs';
 import { User } from '../models/users.model';
 import { Post, PostUser } from '../models/posts.model';
+import { AuthStore } from '../../../core/auth/auth.store';
 
 @Injectable()
 export class PostsDataService {
   private postsApi = inject(PostsService);
   private usersApi = inject(UsersService);
+  private authStore = inject(AuthStore);
   private usersMap = signal<Record<number, User | null>>({}); // null in case of non-existing user
   private page = signal(1); // start with 1
   private perPage = 10; // number of posts per page
@@ -29,17 +31,10 @@ export class PostsDataService {
     }),
     stream: ({ params }) => {
       if (params.authorId) {
-        return this.postsApi.getPostsByUser(
-          params.authorId,
-          params.page,
-          this.perPage
-        );
+        return this.postsApi.getPostsByUser(params.authorId, params.page, this.perPage);
       }
 
-      return this.postsApi.getPosts(
-        params.page,
-        this.perPage
-      );
+      return this.postsApi.getPosts(params.page, this.perPage);
     },
   });
 
@@ -140,7 +135,9 @@ export class PostsDataService {
 
   readonly detailLoading = computed(() => this.postDetailResource.isLoading() || this.usersBatchResource.isLoading());
 
-  readonly error = computed(
+  readonly error = computed(() => this.postsResource.error() ?? this.usersBatchResource.error());
+
+  readonly errorDetail = computed(
     () => this.postsResource.error() ?? this.postDetailResource.error() ?? this.usersBatchResource.error(),
   );
 
@@ -212,18 +209,28 @@ export class PostsDataService {
     // });
   }
 
-  // createPost(post: Partial<Post>) {
-  //   return this.postsApi.createPost(this.selectedPostId(), post).pipe(
-  //     tap(() => {
-  //       // trigger refetch
-  //       this.refreshTick.update(v => v + 1);
-  //     })
-  //   );
-  // }
-  setAuthorFilter(id: number | null) {
-    this.authorFilter.set(id);
-    this.page.set(1);
-    this.posts.set([]);
+  createPost(post: Partial<Post>) {
+    const user = this.authStore.currentUser();
+    if (!user) throw new Error('Not logged in');
+
+    return this.postsApi.createPost(user?.id, post).pipe(
+      tap(() => {
+        // trigger refetch
+        this.refreshTick.update((v) => v + 1);
+      }),
+    );
+  }
+
+  updatePost(post: Partial<Post>) {
+    const user = this.authStore.currentUser();
+    if (!user) throw new Error('Not logged in');
+
+    return this.postsApi.updatePost(post).pipe(
+      tap(() => {
+        // trigger refetch
+        this.refreshTick.update((v) => v + 1);
+      }),
+    );
   }
 
   deletePost(id: number) {
@@ -233,6 +240,12 @@ export class PostsDataService {
         this.refreshTick.update((v) => v + 1);
       }),
     );
+  }
+
+  setAuthorFilter(id: number | null) {
+    this.authorFilter.set(id);
+    this.page.set(1);
+    this.posts.set([]);
   }
 
   onScrollDown() {
