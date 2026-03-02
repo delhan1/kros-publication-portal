@@ -35,7 +35,10 @@
           <mat-card-title class="d-flex justify-content-between">
             <span>{{ comment.name }}</span>
           </mat-card-title>
-          <mat-card-subtitle>{{ comment.created_at ? (comment.created_at | date) : '???' }}</mat-card-subtitle>
+          <mat-card-subtitle>
+            {{ comment.email }} •
+            <span class="text-muted fw-light">{{ comment.created_at ? (comment.created_at | date) : '???' }}</span>
+          </mat-card-subtitle>
 
           @if (authStore.currentUser()?.id === comment.user_id) {
             <div>
