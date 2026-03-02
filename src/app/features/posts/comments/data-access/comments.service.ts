@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { Comment } from '../models/comments.model';
 
@@ -24,33 +24,6 @@ export class CommentsService {
   }
 
   /**
-   * Gets comment by id.
-   * @param id Id of comment.
-   * @return {Observable} of comments.
-   */
-  public getComment(id: number): Observable<Comment> {
-    return this.httpClient.get<Comment>(`${environment.api}/comments/${id}`);
-  }
-  //
-  // /**
-  //  * Gets count of likes by comment id.
-  //  * @param commentId Id of comment.
-  //  * @return {Observable} of like count.
-  //  */
-  // public getCommentLikeCount(commentId: number): Observable<number> {
-  //   return this.httpClient.get<number>(`${API_SERVER}/comment/${commentId}/like/count`);
-  // }
-  //
-  // /**
-  //  * Gets count of comments by comment id.
-  //  * @param commentId
-  //  * @return {Observable} of comments count.
-  //  */
-  // public getCommentCommentCount(commentId: number): Observable<number> {
-  //   return this.httpClient.get<number>(`${API_SERVER}/comment/${commentId}/comment/count`);
-  // }
-  //
-  /**
    * Creates comment.
    * @param postId Post ID.
    * @param comment Comment to create.
@@ -59,26 +32,7 @@ export class CommentsService {
   public createComment(postId: number, comment: Partial<Comment>): Observable<void> {
     return this.httpClient.post<void>(`${environment.api}/posts/${postId}/comments`, comment);
   }
-  //
-  // /**
-  //  * Updates comment.
-  //  * @param comment Comment to update.
-  //  * @return {Observable} of void.
-  //  */
-  // public updateComment(comment: Comment): Observable<void> {
-  //   return this.httpClient.put<void>(`${API_SERVER}/comment/${comment.id}`, comment);
-  // }
-  //
-  // /**
-  //  * Creates comment of comment specified by id.
-  //  * @param commentId Id of comment.
-  //  * @param comment Comment to create.
-  //  * @return {Observable} of void.
-  //  */
-  // public createCommentComment(commentId: number, comment: Comment): Observable<void> {
-  //   return this.httpClient.put<void>(`${API_SERVER}/comment/${commentId}/comment`, comment);
-  // }
-  //
+
   /**
    * Deletes comment by id.
    * @param id Id of comment.
@@ -87,13 +41,4 @@ export class CommentsService {
   public deleteComment(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${environment.api}/comments/${id}`);
   }
-  //
-  // /**
-  //  * Deletes comment by id.
-  //  * @param id Id of comment.
-  //  * @return {Observable} of void.
-  //  */
-  // public deleteComment(id: number): Observable<void> {
-  //   return this.httpClient.delete<void>(`${API_SERVER}/comment/${id}`);
-  // }
 }

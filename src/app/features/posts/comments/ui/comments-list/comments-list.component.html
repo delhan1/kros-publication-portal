@@ -4,7 +4,9 @@
 
 <div class="d-flex justify-content-between mb-2">
   <h6>{{ 'comments.title' | translate }}</h6>
-  <button matButton="filled" (click)="openAddCommentDialog()">{{ 'comments.create' | translate }}</button>
+  @if (authStore.isLoggedIn()) {
+    <button matButton="filled" (click)="openAddCommentDialog()">{{ 'comments.create' | translate }}</button>
+  }
 </div>
 
 <div class="d-grid gap-3 column-gap-3 overflow-auto">
@@ -13,7 +15,7 @@
       <mat-progress-spinner [diameter]="40" color="primary" mode="indeterminate"></mat-progress-spinner>
     </div>
   }
-    
+
   @if (error) {
     <span class="p-4 text-danger text-center">
       {{ 'errors.failedToLoadComments' | translate }}
@@ -29,8 +31,13 @@
       <div class="d-flex justify-content-between">
         <mat-card-header class="justify-content-between w-100">
           <img mat-card-avatar [src]="'assets/images/default.png'" alt="Image of user" />
+
           <mat-card-title class="d-flex justify-content-between">
             <span>{{ comment.name }}</span>
+          </mat-card-title>
+          <mat-card-subtitle>{{ comment.created_at ? (comment.created_at | date) : '???' }}</mat-card-subtitle>
+
+          @if (authStore.currentUser()?.id === comment.user_id) {
             <div>
               <button
                 mat-icon-button
@@ -39,8 +46,7 @@
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
-          </mat-card-title>
-          <mat-card-subtitle>{{ comment.created_at ? (comment.created_at | date) : '???' }}</mat-card-subtitle>
+          }
         </mat-card-header>
       </div>
       <mat-card-content>

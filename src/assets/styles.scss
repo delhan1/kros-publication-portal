@@ -85,7 +85,7 @@ body {
     width: 100%;
   }
 
-  .mat-mdc-form-field.ng-invalid:not(:last-of-type) {
+  .mat-mdc-form-field:not(:last-of-type) {
     margin-bottom: 1rem;
   }
 }

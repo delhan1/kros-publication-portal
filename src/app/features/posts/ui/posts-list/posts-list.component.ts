@@ -22,6 +22,7 @@ import {
 import { SnackbarService } from '../../../../shared/ui/info-snackbar/snackbar.service';
 import { Post } from '../../models/posts.model';
 import { MatRipple } from '@angular/material/core';
+import { AuthStore } from '../../../../core/auth/auth.store';
 
 @Component({
   selector: 'app-posts-list',
@@ -46,6 +47,8 @@ import { MatRipple } from '@angular/material/core';
 })
 export class PostsListComponent {
   readonly postsDataService = inject(PostsDataService);
+  readonly authStore = inject(AuthStore);
+  
   private dialog = inject(MatDialog);
   private snackBar = inject(SnackbarService);
 

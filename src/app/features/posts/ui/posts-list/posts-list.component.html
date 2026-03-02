@@ -1,4 +1,4 @@
-<mat-form-field class="w-100">
+<mat-form-field class="w-100 mb-3">
   <input type="text" matInput placeholder="{{ 'posts.filter' | translate }}" [formControl]="filterControl" />
   @if (filterControl.value) {
     <button matSuffix matIconButton aria-label="Clear" (click)="filterControl.reset()">
@@ -26,7 +26,8 @@
         matRipple
         [class.selected]="postsDataService.selectedPostId() === post.id"
         [routerLink]="'/posts/' + post.id">
-        <div> <!-- using empty div wrapper https://github.com/angular/components/issues/12210 -->
+        <div>
+          <!-- using empty div wrapper https://github.com/angular/components/issues/12210 -->
           <mat-card-header>
             <div mat-card-avatar class="example-header-image"></div>
             <mat-card-title>{{ post.title }} {{ post.id }} {{ postsDataService.loading() }}</mat-card-title>
@@ -48,4 +49,6 @@
   </div>
 </cdk-virtual-scroll-viewport>
 
-<button matButton="filled" class="mt-3 py-3" (click)="openAddPostDialog()">{{ 'posts.create' | translate }}</button>
+@if (authStore.isLoggedIn()) {
+  <button matButton="filled" class="mt-3 py-3" (click)="openAddPostDialog()">{{ 'posts.create' | translate }}</button>
+}

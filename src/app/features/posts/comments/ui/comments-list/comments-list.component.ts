@@ -31,8 +31,9 @@ import { AuthStore } from '../../../../../core/auth/auth.store';
 export class CommentsListComponent {
   activePostId = input.required<number>();
 
-  commentsDataService = inject(CommentsDataService);
-  private authStore = inject(AuthStore);
+  readonly commentsDataService = inject(CommentsDataService);
+  readonly authStore = inject(AuthStore);
+  
   private dialog = inject(MatDialog);
   private snackBar = inject(SnackbarService);
 

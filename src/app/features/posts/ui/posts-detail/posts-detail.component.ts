@@ -22,6 +22,7 @@ import {
   PostsModifyDialogResultData,
 } from '../posts-modify-dialog/posts-modify-dialog.component';
 import { Post } from '../../models/posts.model';
+import { AuthStore } from '../../../../core/auth/auth.store';
 
 @Component({
   selector: 'app-posts-detail',
@@ -41,6 +42,7 @@ import { Post } from '../../models/posts.model';
 })
 export class PostsDetailComponent {
   readonly postsDataService = inject(PostsDataService);
+  readonly authStore = inject(AuthStore);
 
   private dialog = inject(MatDialog);
   private snackBar = inject(SnackbarService);
