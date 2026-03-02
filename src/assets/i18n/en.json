@@ -18,6 +18,7 @@
   "posts": {
     "title": "Posts",
     "create": "Create post",
+    "edit": "Edit post",
     "name": "Name",
     "filter": "Filter by user ID",
     "detail": {
@@ -53,6 +54,19 @@
       "noItems": "No comments found."
     }
   },
+  "login": {
+    "title": "Login",
+    "logout": "Logout",
+    "id": "User ID",
+    "dialog": {
+      "title": "Logout?",
+      "message": "Do you really want to logout?"
+    },
+    "info": {
+      "loggedIn": "The user has been successfully logged in.",
+      "loggedOut": "The user has been logged out."
+    }
+  },
   "lang": {
     "en": "English",
     "sk": "Slovensky"
@@ -71,6 +85,9 @@
     "emailAlreadyUsed": "E-mail already used.",
     "confirmPasswordNotMatch": "Confirmation password does not match.",
     "404": "The page asked was not found.",
-    "unexpectedErrorOccurred": "An unexpected error occurred."
+    "unexpectedErrorOccurred": "An unexpected error occurred.",
+    "userNotFound": "The user was not found.",
+    "failedToLoadPosts": "Failed to load posts.",
+    "failedToLoadComments": "Failed to load comments."
   }
 }

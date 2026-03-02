@@ -18,6 +18,7 @@
   "posts": {
     "title": "Články",
     "create": "Vytvoriť článok",
+    "edit": "Upraviť článok",
     "name": "Názov",
     "filter": "Filtrovať podľa ID používateľa",
     "detail": {
@@ -53,6 +54,19 @@
       "noItems": "Neboli nájdené žiadne komentáre."
     }
   },
+  "login": {
+    "title": "Prihlásiť sa",
+    "logout": "Odhlásiť sa",
+    "id": "ID používateľa",
+    "dialog": {
+      "title": "Odhlásiť sa?",
+      "message": "Naozaj sa chcete odhlásiť?"
+    },
+    "info": {
+      "loggedIn": "Používateľ bol úspešne prihlásený.",
+      "loggedOut": "Používateľ bol odhlásený."
+    }
+  },
   "lang": {
     "en": "English",
     "sk": "Slovensky"
@@ -71,6 +85,9 @@
     "emailAlreadyUsed": "E-mail sa už používa.",
     "confirmPasswordNotMatch": "Heslá sa nezhodujú.",
     "404": "Požadovaná stránka nebola nájdená.",
-    "unexpectedErrorOccurred": "Nastala neočakávaná chyba."
+    "unexpectedErrorOccurred": "Nastala neočakávaná chyba.",
+    "userNotFound": "Používateľ nebol nájdený.",
+    "failedToLoadPosts": "Nepodarilo sa načítať články.",
+    "failedToLoadComments": "Nepodarilo sa načítať komentáre."
   }
 }
