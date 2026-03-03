@@ -25,7 +25,8 @@
       <mat-card
         matRipple
         [class.selected]="postsDataService.selectedPostId() === post.id"
-        [routerLink]="'/posts/' + post.id">
+        [routerLink]="'/posts/' + post.id"
+        (click)="showDetail()">
         <div>
           <!-- using empty div wrapper https://github.com/angular/components/issues/12210 -->
           <mat-card-header>

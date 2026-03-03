@@ -1,7 +1,10 @@
 <div class="d-flex h-100">
-  <app-posts-list class="d-none d-md-flex flex-md-column flex-shrink-0 h-100"></app-posts-list>
+  <app-posts-list
+    [class.d-none]="postsLayoutService.isDetail()"
+    [class.flex-grow-1]="postsLayoutService.isList()"
+    class="d-flex flex-column d-md-flex flex-md-column flex-shrink-0 flex-md-grow-0 h-100"></app-posts-list>
 
-  <div class="ps-md-3 h-100 flex-grow-1">
+  <div [class.d-none]="postsLayoutService.isList()" class="ps-md-3 h-100 d-md-block flex-grow-1">
     <router-outlet />
   </div>
 </div>

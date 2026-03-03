@@ -17,6 +17,11 @@
 @if (post && !loading) {
   <mat-card class="h-100 overflow-auto">
     <mat-card-header class="pb-2">
+      <div class="d-flex d-md-none align-items-center mb-0" mat-card-avatar>
+        <button mat-icon-button class="menu-icon" (click)="backToList()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
       <mat-card-title class="d-flex justify-content-between">
         <span>{{ post.title }} {{ post.user_id }}</span>
       </mat-card-title>

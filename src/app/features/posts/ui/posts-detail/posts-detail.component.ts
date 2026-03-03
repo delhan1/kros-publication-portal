@@ -23,6 +23,7 @@ import {
 import { Post } from '../../models/posts.model';
 import { AuthStore } from '../../../../core/auth/auth.store';
 import { PostsTestDataService } from '../../data-access/posts-test.data';
+import { PostsLayoutService } from '../../data-access/posts-layout.service';
 
 @Component({
   selector: 'app-posts-detail',
@@ -41,6 +42,7 @@ import { PostsTestDataService } from '../../data-access/posts-test.data';
   styleUrl: './posts-detail.component.scss',
 })
 export class PostsDetailComponent {
+  readonly postsLayoutService = inject(PostsLayoutService);
   readonly postsDataService = inject(PostsTestDataService);
   readonly authStore = inject(AuthStore);
 
@@ -123,5 +125,9 @@ export class PostsDetailComponent {
         }),
       )
       .subscribe();
+  }
+
+  backToList() {
+    this.postsLayoutService.setView('list');
   }
 }

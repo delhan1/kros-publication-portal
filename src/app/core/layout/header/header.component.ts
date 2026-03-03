@@ -53,9 +53,6 @@ export class AppHeaderComponent implements OnInit {
 
   public ngOnInit() {
     this.selectedLang = this.translateService.getCurrentLang();
-    // this.themeService.darkTheme$.pipe(take(1)).subscribe((theme) => {
-    //   this.darkTheme = theme;
-    // });
   }
 
   /**
@@ -67,15 +64,6 @@ export class AppHeaderComponent implements OnInit {
     localStorage.setItem('locale', languageKey);
     this.translateService.use(languageKey);
     this.adapter.setLocale(languageKey);
-  }
-
-  /**
-   * Toggles dark theme.
-   */
-  public toggleDarkTheme(): void {
-    this.darkTheme = !this.darkTheme;
-    localStorage.setItem('darkTheme', JSON.stringify(this.darkTheme));
-    // this.themeService.changeDarkTheme(this.darkTheme);
   }
 
   /**

@@ -4,7 +4,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { DatePipe, JsonPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -24,6 +24,7 @@ import { Post } from '../../models/posts.model';
 import { MatRipple } from '@angular/material/core';
 import { AuthStore } from '../../../../core/auth/auth.store';
 import { PostsTestDataService } from '../../data-access/posts-test.data';
+import { PostsLayoutService } from '../../data-access/posts-layout.service';
 
 @Component({
   selector: 'app-posts-list',
@@ -42,12 +43,12 @@ import { PostsTestDataService } from '../../data-access/posts-test.data';
     MatInputModule,
     MatIconModule,
     MatRipple,
-    JsonPipe,
   ],
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.scss',
 })
 export class PostsListComponent {
+  readonly postsLayoutService = inject(PostsLayoutService);
   readonly postsDataService = inject(PostsTestDataService);
   readonly authStore = inject(AuthStore);
 
@@ -116,5 +117,9 @@ export class PostsListComponent {
         }),
       )
       .subscribe();
+  }
+
+  showDetail() {
+    this.postsLayoutService.setView('detail');
   }
 }
