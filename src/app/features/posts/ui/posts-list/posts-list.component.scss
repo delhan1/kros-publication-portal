@@ -1,0 +1,12 @@
+.example-header-image {
+  background-image: url('https://material.angular.dev/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+.mat-mdc-card {
+  cursor: pointer;
+  
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
+}

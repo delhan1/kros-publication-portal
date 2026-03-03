@@ -1,0 +1,11 @@
+$size: 70px;
+
+.circle {
+  height: $size;
+  width: $size;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-bottom: 16px;
+  object-fit: cover;
+  background-color: var(--mat-sys-surface-container-highest);
+}

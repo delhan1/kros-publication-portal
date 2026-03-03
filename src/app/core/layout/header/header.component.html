@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-between align-items-center w-100">
+  <span class="text-truncate">{{ 'common.title' | translate }}</span>
+
+  <div class="d-flex justify-content-center align-items-center">
+    <button
+      class="d-none d-lg-inline-block"
+      [matMenuTriggerFor]="langsMenu"
+      mat-icon-button
+      [matTooltip]="'common.selectLang' | translate">
+      <mat-icon>language</mat-icon>
+    </button>
+
+    @if (!authStore.isLoggedIn()) {
+      <button class="d-none d-lg-inline-block" matButton="filled" (click)="openLoginDialog()">
+        {{ 'login.title' | translate }}
+      </button>
+    } @else {
+      <button class="d-none d-lg-inline-block" matButton="filled" (click)="openLogoutDialog()">
+        {{ 'login.logout' | translate }}
+      </button>
+    }
+
+    <button class="d-lg-none" mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #langsMenu="matMenu">
+      @for (lang of languages; track lang) {
+        <button mat-menu-item (click)="changeLanguage(lang)">
+          @if (lang === selectedLang) {
+            <mat-icon color="accent">
+              {{ 'radio_button_checked' }}
+            </mat-icon>
+          } @else {
+            <mat-icon>
+              {{ 'radio_button_unchecked' }}
+            </mat-icon>
+          }
+          {{ 'lang.' + lang | translate }} ({{ lang | uppercase }})
+        </button>
+      }
+    </mat-menu>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item [matMenuTriggerFor]="langsMenu">
+        <mat-icon>language</mat-icon>
+        <span>{{ 'common.language' | translate }}</span>
+      </button>
+      @if (!authStore.isLoggedIn()) {
+        <button mat-menu-item (click)="openLoginDialog()">
+          <mat-icon>login</mat-icon>
+          {{ 'login.title' | translate }}
+        </button>
+      } @else {
+        <button mat-menu-item (click)="openLogoutDialog()">
+          <mat-icon>logout</mat-icon>
+          {{ 'login.logout' | translate }}
+        </button>
+      }
+    </mat-menu>
+  </div>
+</div>

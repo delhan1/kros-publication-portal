@@ -1,0 +1,62 @@
+@let loading = commentsDataService.commentsResource.isLoading();
+@let error = commentsDataService.commentsResource.error();
+@let comments = commentsDataService.commentsVm();
+
+<div class="d-flex justify-content-between mb-2">
+  <h6>{{ 'comments.title' | translate }}</h6>
+  @if (authStore.isLoggedIn()) {
+    <button matButton="filled" (click)="openAddCommentDialog()">{{ 'comments.create' | translate }}</button>
+  }
+</div>
+
+<div class="d-grid gap-3 column-gap-3 overflow-auto">
+  @if (loading && !error) {
+    <div class="d-flex justify-content-center">
+      <mat-progress-spinner [diameter]="40" color="primary" mode="indeterminate"></mat-progress-spinner>
+    </div>
+  }
+
+  @if (error) {
+    <span class="p-4 text-danger text-center">
+      {{ 'errors.failedToLoadComments' | translate }}
+    </span>
+  }
+
+  @if (!loading && !comments?.length && !error) {
+    <p class="m-10 text-center">{{ 'comments.info.noItems' | translate }}</p>
+  }
+
+  @for (comment of comments; track comment.id) {
+    <mat-card class="item-card mat-mdc-elevation-z0" appearance="outlined">
+      <div class="d-flex justify-content-between">
+        <mat-card-header class="justify-content-between w-100">
+          <img mat-card-avatar [src]="'assets/images/default.png'" alt="Image of user" />
+
+          <mat-card-title class="d-flex justify-content-between">
+            <span>{{ comment.name }}</span>
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ comment.email }} •
+            <span class="text-muted fw-light">{{ comment.created_at ? (comment.created_at | date) : '???' }}</span>
+          </mat-card-subtitle>
+
+          @if (authStore.currentUser()?.id === comment.user_id) {
+            <div>
+              <button
+                mat-icon-button
+                matTooltip="{{ 'common.delete' | translate }}"
+                (click)="openDeleteCommentDialog(comment.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+        </mat-card-header>
+      </div>
+      <mat-card-content>
+        <p>
+          {{ comment.body }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

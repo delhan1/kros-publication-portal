@@ -1,0 +1,60 @@
+@let loading = postsDataService.detailLoading();
+
+@if (loading) {
+  <div class="d-flex justify-content-center">
+    <mat-progress-spinner [diameter]="50" color="primary" mode="indeterminate"></mat-progress-spinner>
+  </div>
+}
+
+@let post = postsDataService.postDetailVm();
+
+@if (postsDataService.detailError()) {
+  <span class="p-4 text-danger text-center">
+    {{ 'errors.failedToLoadPosts' | translate }}
+  </span>
+}
+
+@if (post) {
+  <mat-card class="h-100 overflow-auto">
+    <mat-card-header class="pb-2">
+      <div class="d-flex d-md-none align-items-center mb-0" mat-card-avatar>
+        <button mat-icon-button class="menu-icon" (click)="backToList()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+      <mat-card-title class="d-flex justify-content-between">
+        <span>{{ post.title }}</span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <img class="avatar me-1" [src]="'assets/images/default.png'" alt="Image of user" />
+        <span>{{ post.author_name }} •&nbsp;</span>
+        <span class="text-muted fw-light">{{ post.created_at ? (post.created_at | date) : '???' }}</span>
+      </mat-card-subtitle>
+
+      @if (authStore.currentUser()?.id === post.user_id) {
+        <div class="d-flex align-items-center">
+          <button
+            class="me-1"
+            mat-icon-button
+            matTooltip="{{ 'common.edit' | translate }}"
+            (click)="openEditPostDialog(post)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            matTooltip="{{ 'common.delete' | translate }}"
+            (click)="openDeletePostDialog(post.id, post.title)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="overflow-auto">
+      <p class="pt-3 body-text">{{ post.body }}</p>
+      <mat-divider class="mb-2"></mat-divider>
+
+      <app-comments-list [activePostId]="post.id"></app-comments-list>
+    </mat-card-content>
+  </mat-card>
+}

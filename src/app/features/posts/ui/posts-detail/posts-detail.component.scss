@@ -1,0 +1,14 @@
+$size: 20px;
+
+.body-text {
+  white-space-collapse: preserve;
+}
+
+.avatar {
+  height: $size;
+  width: $size;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+  vertical-align: sub;
+}

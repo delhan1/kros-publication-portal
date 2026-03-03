@@ -1,0 +1,55 @@
+<mat-form-field class="w-100 mb-3">
+  <input type="text" matInput placeholder="{{ 'posts.filter' | translate }}" [formControl]="filterControl" />
+  @if (filterControl.value) {
+    <button matSuffix matIconButton aria-label="Clear" (click)="filterControl.reset()">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</mat-form-field>
+
+@if (postsDataService.listError()) {
+  <span class="p-4 text-danger text-center">
+    {{ 'errors.failedToLoadPosts' | translate }}
+  </span>
+}
+
+@if (!postsDataService.listLoading() && !postsDataService.postsVm().length && !postsDataService.listError()) {
+  <span class="p-4 text-center">
+    {{ 'posts.info.noItems' | translate }}
+  </span>
+}
+
+<cdk-virtual-scroll-viewport itemSize="100" class="h-100" (scrolledIndexChange)="onScrolledIndexChange($event)">
+  <div class="d-grid gap-2 column-gap-2 pe-3">
+    @for (post of postsDataService.postsVm(); track post.id) {
+      <mat-card
+        matRipple
+        [class.selected]="postsDataService.selectedPostId() === post.id"
+        [routerLink]="'/posts/' + post.id"
+        (click)="showDetail()">
+        <div>
+          <!-- using empty div wrapper https://github.com/angular/components/issues/12210 -->
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>{{ post.title }}</mat-card-title>
+            <mat-card-subtitle>
+              {{ post.author_name }} •
+              <span class="text-muted fw-light">{{ post.created_at ? (post.created_at | date) : '???' }}</span>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content></mat-card-content>
+        </div>
+      </mat-card>
+    }
+
+    @if (postsDataService.listLoading() && !postsDataService.listError()) {
+      <div class="d-flex justify-content-center">
+        <mat-progress-spinner [diameter]="50" color="primary" mode="indeterminate"></mat-progress-spinner>
+      </div>
+    }
+  </div>
+</cdk-virtual-scroll-viewport>
+
+@if (authStore.isLoggedIn()) {
+  <button matButton="filled" class="mt-3 py-3" (click)="openAddPostDialog()">{{ 'posts.create' | translate }}</button>
+}

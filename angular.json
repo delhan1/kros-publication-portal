@@ -32,14 +32,13 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/assets",
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/assets/styles.scss"
-            ]
+            "styles": ["node_modules/bootstrap/dist/css/bootstrap.min.css", "src/assets/styles.scss"]
           },
           "configurations": {
             "production": {
@@ -47,7 +46,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
