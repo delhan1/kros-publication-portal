@@ -3,34 +3,31 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { Comment } from '../models/comments.model';
+import { CommentsApi } from './abstract/comments.api';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CommentsService {
+export class CommentsService implements CommentsApi {
   public constructor(private httpClient: HttpClient) {}
 
   /**
    * Gets all comments.
    * @param postId Post ID.
-   * @param page Page number.
-   * @param perPage Number of comments per page.
    * @return {Observable} of comments.
    */
-  public getComments(postId: number, page: number, perPage: number): Observable<Comment[]> {
-    const params = new HttpParams().set('page', page).set('per_page', perPage);
-
-    return this.httpClient.get<Comment[]>(`${environment.api}/posts/${postId}/comments`, { params });
+  public getComments(postId: number): Observable<Comment[]> {
+    return this.httpClient.get<Comment[]>(`${environment.api}/posts/${postId}/comments`);
   }
 
   /**
    * Creates comment.
    * @param postId Post ID.
    * @param comment Comment to create.
-   * @return {Observable} of void.
+   * @return {Observable} of Comment.
    */
-  public createComment(postId: number, comment: Partial<Comment>): Observable<void> {
-    return this.httpClient.post<void>(`${environment.api}/posts/${postId}/comments`, comment);
+  public createComment(postId: number, comment: Partial<Comment>): Observable<Comment> {
+    return this.httpClient.post<Comment>(`${environment.api}/posts/${postId}/comments`, comment);
   }
 
   /**

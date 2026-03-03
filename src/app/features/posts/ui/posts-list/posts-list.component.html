@@ -7,13 +7,13 @@
   }
 </mat-form-field>
 
-@if (postsDataService.error()) {
+@if (postsDataService.listError()) {
   <span class="p-4 text-danger text-center">
     {{ 'errors.failedToLoadPosts' | translate }}
   </span>
 }
 
-@if (!postsDataService.loading() && !postsDataService.postsVm().length && !postsDataService.error()) {
+@if (!postsDataService.listLoading() && !postsDataService.postsVm().length && !postsDataService.listError()) {
   <span class="p-4 text-center">
     {{ 'posts.info.noItems' | translate }}
   </span>
@@ -30,7 +30,7 @@
           <!-- using empty div wrapper https://github.com/angular/components/issues/12210 -->
           <mat-card-header>
             <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>{{ post.title }} {{ post.id }} {{ postsDataService.loading() }}</mat-card-title>
+            <mat-card-title>{{ post.title }} {{ post.id }} {{ postsDataService.listLoading() }}</mat-card-title>
             <mat-card-subtitle>
               {{ post.author_name }} •
               <span class="text-muted fw-light">{{ post.created_at ? (post.created_at | date) : '???' }}</span>
@@ -41,7 +41,7 @@
       </mat-card>
     }
 
-    @if (postsDataService.loading() && !postsDataService.error()) {
+    @if (postsDataService.listLoading() && !postsDataService.listError()) {
       <div class="d-flex justify-content-center">
         <mat-progress-spinner [diameter]="50" color="primary" mode="indeterminate"></mat-progress-spinner>
       </div>

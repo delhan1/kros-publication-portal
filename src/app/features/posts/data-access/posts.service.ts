@@ -3,11 +3,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Post } from '../models/posts.model';
+import { PostsApi } from './abstract/posts.api';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PostsService {
+export class PostsService implements PostsApi {
   public constructor(private httpClient: HttpClient) {}
 
   /**
@@ -17,14 +18,9 @@ export class PostsService {
    * @return {Observable} of posts.
    */
   public getPosts(page: number, perPage: number): Observable<Post[]> {
-    const params = new HttpParams()
-      .set('page', page)
-      .set('per_page', perPage);
+    const params = new HttpParams().set('page', page).set('per_page', perPage);
 
-    return this.httpClient.get<Post[]>(
-      `${environment.api}/posts`,
-      { params }
-    );
+    return this.httpClient.get<Post[]>(`${environment.api}/posts`, { params });
   }
 
   /**
@@ -53,19 +49,19 @@ export class PostsService {
    * Creates post.
    * @param userId User ID.
    * @param post Post to create.
-   * @return {Observable} of void.
+   * @return {Observable} of Post.
    */
-  public createPost(userId: number, post: Partial<Post>): Observable<void> {
-    return this.httpClient.post<void>(`${environment.api}/users/${userId}/posts`, post);
+  public createPost(userId: number, post: Partial<Post>): Observable<Post> {
+    return this.httpClient.post<Post>(`${environment.api}/users/${userId}/posts`, post);
   }
 
   /**
    * Updates post.
    * @param post Post to update.
-   * @return {Observable} of void.
+   * @return {Observable} of Post.
    */
-  public updatePost(post: Partial<Post>): Observable<void> {
-    return this.httpClient.put<void>(`${environment.api}/posts/${post.id}`, post);
+  public updatePost(post: Partial<Post>): Observable<Post> {
+    return this.httpClient.put<Post>(`${environment.api}/posts/${post.id}`, post);
   }
 
   /**

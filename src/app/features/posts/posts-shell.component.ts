@@ -1,23 +1,32 @@
 import { Component, effect, inject } from '@angular/core';
 import { PostsListComponent } from './ui/posts-list/posts-list.component';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { PostsDataService } from './data-access/posts.data';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map, of } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
+import { PostsTestDataService } from './data-access/posts-test.data';
 
 @Component({
   selector: 'app-posts-shell',
   imports: [PostsListComponent, RouterOutlet],
-  providers: [PostsDataService],
+  providers: [PostsTestDataService],
   templateUrl: './posts-shell.component.html',
   styleUrl: './posts-shell.component.scss',
 })
 export class PostsShellComponent {
   private route = inject(ActivatedRoute);
-  private postsDataService = inject(PostsDataService);
+  private router = inject(Router);
+  private postsDataService = inject(PostsTestDataService);
 
   readonly activePostId = toSignal(
-    this.route.firstChild?.paramMap.pipe(map((params) => Number(params.get('id')))) ?? of(null),
+    this.router.events.pipe(
+      filter((e) => e instanceof NavigationEnd),
+      startWith(null),
+      map(() => {
+        const child = this.route.firstChild;
+        const id = child?.snapshot.paramMap.get('id');
+        return id ? Number(id) : null;
+      }),
+    ),
     { initialValue: null },
   );
 

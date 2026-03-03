@@ -4,8 +4,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { PostsDataService } from '../../data-access/posts.data';
-import { DatePipe } from '@angular/common';
+import { DatePipe, JsonPipe } from '@angular/common';
 import { CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -16,13 +15,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
-  PostsModifyDialogComponent, PostsModifyDialogData,
-  PostsModifyDialogResultData
+  PostsModifyDialogComponent,
+  PostsModifyDialogData,
+  PostsModifyDialogResultData,
 } from '../posts-modify-dialog/posts-modify-dialog.component';
 import { SnackbarService } from '../../../../shared/ui/info-snackbar/snackbar.service';
 import { Post } from '../../models/posts.model';
 import { MatRipple } from '@angular/material/core';
 import { AuthStore } from '../../../../core/auth/auth.store';
+import { PostsTestDataService } from '../../data-access/posts-test.data';
 
 @Component({
   selector: 'app-posts-list',
@@ -41,14 +42,15 @@ import { AuthStore } from '../../../../core/auth/auth.store';
     MatInputModule,
     MatIconModule,
     MatRipple,
+    JsonPipe,
   ],
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.scss',
 })
 export class PostsListComponent {
-  readonly postsDataService = inject(PostsDataService);
+  readonly postsDataService = inject(PostsTestDataService);
   readonly authStore = inject(AuthStore);
-  
+
   private dialog = inject(MatDialog);
   private snackBar = inject(SnackbarService);
 
@@ -58,7 +60,7 @@ export class PostsListComponent {
     this.filterControl.valueChanges.pipe(
       debounceTime(600),
       distinctUntilChanged(),
-      map((value) => value ?? null),
+      map((value) => Number(value) ?? null),
     ),
     { initialValue: null },
   );
@@ -72,8 +74,8 @@ export class PostsListComponent {
 
   onScrolledIndexChange(index: number) {
     const posts = this.postsDataService.postsVm();
-    const buffer = 5; // počet položiek pred koncom, pri ktorých sa načíta ďalšia stránka
-    if (index + buffer >= posts.length && !this.postsDataService.loading() && !this.postsDataService.error()) {
+    const buffer = 5;
+    if (index + buffer >= posts.length && !this.postsDataService.listLoading() && !this.postsDataService.listError()) {
       this.postsDataService.onScrollDown();
     }
   }

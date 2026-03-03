@@ -1,6 +1,6 @@
 @let loading = commentsDataService.commentsResource.isLoading();
 @let error = commentsDataService.commentsResource.error();
-@let comments = commentsDataService.comments();
+@let comments = commentsDataService.commentsVm();
 
 <div class="d-flex justify-content-between mb-2">
   <h6>{{ 'comments.title' | translate }}</h6>

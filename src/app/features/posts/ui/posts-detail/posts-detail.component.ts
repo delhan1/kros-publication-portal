@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { PostsDataService } from '../../data-access/posts.data';
 import { CommentsListComponent } from '../../comments/ui/comments-list/comments-list.component';
 import { MatDivider } from '@angular/material/list';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -23,6 +22,7 @@ import {
 } from '../posts-modify-dialog/posts-modify-dialog.component';
 import { Post } from '../../models/posts.model';
 import { AuthStore } from '../../../../core/auth/auth.store';
+import { PostsTestDataService } from '../../data-access/posts-test.data';
 
 @Component({
   selector: 'app-posts-detail',
@@ -41,7 +41,7 @@ import { AuthStore } from '../../../../core/auth/auth.store';
   styleUrl: './posts-detail.component.scss',
 })
 export class PostsDetailComponent {
-  readonly postsDataService = inject(PostsDataService);
+  readonly postsDataService = inject(PostsTestDataService);
   readonly authStore = inject(AuthStore);
 
   private dialog = inject(MatDialog);

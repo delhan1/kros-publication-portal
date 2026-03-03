@@ -8,11 +8,17 @@
 
 @let post = postsDataService.postDetailVm();
 
+@if (postsDataService.detailError()) {
+  <span class="p-4 text-danger text-center">
+    {{ 'errors.failedToLoadPosts' | translate }}
+  </span>
+}
+
 @if (post && !loading) {
   <mat-card class="h-100 overflow-auto">
     <mat-card-header class="pb-2">
       <mat-card-title class="d-flex justify-content-between">
-        <span>{{ post.title }}</span>
+        <span>{{ post.title }} {{ post.user_id }}</span>
       </mat-card-title>
       <mat-card-subtitle>
         <img class="avatar me-1" [src]="'assets/images/default.png'" alt="Image of user" />
