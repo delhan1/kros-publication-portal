@@ -21,6 +21,7 @@
     "edit": "Upraviť článok",
     "name": "Názov",
     "filter": "Filtrovať podľa ID používateľa",
+    "notSelected": "Najprv niečo vyberte",
     "detail": {
       "title": "Detail článku",
       "detail": "Detail",

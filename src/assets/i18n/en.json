@@ -21,6 +21,7 @@
     "edit": "Edit post",
     "name": "Name",
     "filter": "Filter by user ID",
+    "notSelected": "Select something first",
     "detail": {
       "title": "Post detail",
       "detail": "Detail",
