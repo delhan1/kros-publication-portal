@@ -22,8 +22,9 @@ import {
 } from '../posts-modify-dialog/posts-modify-dialog.component';
 import { Post } from '../../models/posts.model';
 import { AuthStore } from '../../../../core/auth/auth.store';
-import { PostsTestDataService } from '../../data-access/posts-test.data';
 import { PostsLayoutService } from '../../data-access/posts-layout.service';
+import { Router } from '@angular/router';
+import { PostsDataService } from '../../data-access/posts.data';
 
 @Component({
   selector: 'app-posts-detail',
@@ -43,9 +44,10 @@ import { PostsLayoutService } from '../../data-access/posts-layout.service';
 })
 export class PostsDetailComponent {
   readonly postsLayoutService = inject(PostsLayoutService);
-  readonly postsDataService = inject(PostsTestDataService);
+  readonly postsDataService = inject(PostsDataService);
   readonly authStore = inject(AuthStore);
 
+  private router = inject(Router);
   private dialog = inject(MatDialog);
   private snackBar = inject(SnackbarService);
 
@@ -117,7 +119,10 @@ export class PostsDetailComponent {
             return EMPTY;
           }
         }),
-        tap(() => this.snackBar.showInfoMessage('posts.info.deleted', { value: title })),
+        tap(() => {
+          this.snackBar.showInfoMessage('posts.info.deleted', { value: title });
+          this.router.navigate(['/posts']);
+        }),
         catchError((err) => {
           this.snackBar.showInfoMessage('errors.unexpectedErrorOccurred');
           console.error('err', err);

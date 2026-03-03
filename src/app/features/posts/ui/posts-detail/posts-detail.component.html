@@ -14,7 +14,7 @@
   </span>
 }
 
-@if (post && !loading) {
+@if (post) {
   <mat-card class="h-100 overflow-auto">
     <mat-card-header class="pb-2">
       <div class="d-flex d-md-none align-items-center mb-0" mat-card-avatar>
@@ -23,7 +23,7 @@
         </button>
       </div>
       <mat-card-title class="d-flex justify-content-between">
-        <span>{{ post.title }} {{ post.user_id }}</span>
+        <span>{{ post.title }}</span>
       </mat-card-title>
       <mat-card-subtitle>
         <img class="avatar me-1" [src]="'assets/images/default.png'" alt="Image of user" />

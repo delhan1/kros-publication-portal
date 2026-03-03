@@ -1,8 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
-import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,14 +16,13 @@ import { catchError, EMPTY, first, switchMap, tap, throwError } from 'rxjs';
 import { SnackbarService } from '../../../shared/ui/info-snackbar/snackbar.service';
 import {
   ConfirmActionDialogComponent,
-  ConfirmActionDialogData
+  ConfirmActionDialogData,
 } from '../../../shared/ui/confirm-action-dialog/confirm-action-dialog.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   imports: [
-    MatSlideToggle,
     MatTooltip,
     TranslatePipe,
     MatMenuTrigger,
@@ -42,8 +39,7 @@ import {
 export class AppHeaderComponent implements OnInit {
   public languages: string[] = LANGUAGES;
   public selectedLang = 'en';
-  public darkTheme: boolean = false;
-  
+
   public authService = inject(AuthService);
   public authStore = inject(AuthStore);
   private translateService = inject(TranslateService);
@@ -88,7 +84,7 @@ export class AppHeaderComponent implements OnInit {
         tap(() => this.snackBar.showInfoMessage('login.info.loggedIn')),
         catchError((err) => {
           if (err.status === 404) {
-            this.snackBar.showInfoMessage('errors.userNotFound');  
+            this.snackBar.showInfoMessage('errors.userNotFound');
           } else {
             this.snackBar.showInfoMessage('errors.unexpectedErrorOccurred');
           }

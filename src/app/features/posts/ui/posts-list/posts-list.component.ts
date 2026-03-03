@@ -23,8 +23,8 @@ import { SnackbarService } from '../../../../shared/ui/info-snackbar/snackbar.se
 import { Post } from '../../models/posts.model';
 import { MatRipple } from '@angular/material/core';
 import { AuthStore } from '../../../../core/auth/auth.store';
-import { PostsTestDataService } from '../../data-access/posts-test.data';
 import { PostsLayoutService } from '../../data-access/posts-layout.service';
+import { PostsDataService } from '../../data-access/posts.data';
 
 @Component({
   selector: 'app-posts-list',
@@ -49,7 +49,7 @@ import { PostsLayoutService } from '../../data-access/posts-layout.service';
 })
 export class PostsListComponent {
   readonly postsLayoutService = inject(PostsLayoutService);
-  readonly postsDataService = inject(PostsTestDataService);
+  readonly postsDataService = inject(PostsDataService);
   readonly authStore = inject(AuthStore);
 
   private dialog = inject(MatDialog);
@@ -76,7 +76,10 @@ export class PostsListComponent {
   onScrolledIndexChange(index: number) {
     const posts = this.postsDataService.postsVm();
     const buffer = 5;
-    if (index + buffer >= posts.length && !this.postsDataService.listLoading() && !this.postsDataService.listError()) {
+
+    const threshold = posts.length - buffer;
+
+    if (index >= threshold && !this.postsDataService.listLoading() && !this.postsDataService.listError()) {
       this.postsDataService.onScrollDown();
     }
   }

@@ -56,6 +56,8 @@ true → application runs using a mocked API (default, token not required)
 
 false → real API is used and a valid token is required
 
+To log in, enter an existing user ID, which will then be saved to local storage and used to simulate a logged-in user.
+
 ## Architecture Overview
 
 The application follows a feature-based structure:
